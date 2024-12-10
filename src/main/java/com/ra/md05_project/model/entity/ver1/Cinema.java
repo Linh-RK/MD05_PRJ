@@ -3,6 +3,8 @@ package com.ra.md05_project.model.entity.ver1;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -23,5 +25,11 @@ public class Cinema {
 
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;
+
+    @Column(name = "created_date", nullable = false)
+    private LocalDateTime createdDate;
+
+    @Column(name = "updated_date", nullable = false)
+    private LocalDateTime updatedDate;
 }
 

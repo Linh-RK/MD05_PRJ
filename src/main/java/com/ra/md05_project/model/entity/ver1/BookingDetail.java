@@ -1,9 +1,14 @@
 package com.ra.md05_project.model.entity.ver1;
 
+import com.ra.md05_project.repository.TicketPriceRepository;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
@@ -11,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class BookingDetail {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

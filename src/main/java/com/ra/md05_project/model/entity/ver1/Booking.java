@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -25,8 +26,14 @@ public class Booking {
     @Column(name = "total_price", nullable = false)
     private Double totalPrice;
 
+    @Column(name = "total_seat", nullable = false)
+    private Double totalSeat;
+
     @Column(name = "status", nullable = false)
     private String status;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

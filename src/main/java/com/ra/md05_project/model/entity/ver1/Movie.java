@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,51 +19,61 @@ import java.util.List;
 @Builder
 public class Movie {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id") 
-    private Long id;
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+@Column(name = "id")
+private Long id;
 
-    @Column(name = "title", length = 255, nullable = false) 
+    @Column(name = "title", length = 255, nullable = false)
     private String title;
 
-    @Column(name = "description", columnDefinition = "TEXT") 
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-    @Column(name = "duration") 
+    @Column(name = "duration")
     private Integer duration;
 
-    @Column(name = "release_date", nullable = false) 
+    @Column(name = "release_date", nullable = false)
     private LocalDate releaseDate;
 
-    @Column(name = "language", length = 50) 
+    @Column(name = "language", length = 50)
     private String language;
 
-    @Column(name = "age_rating", length = 50) 
+    @Column(name = "age_rating", length = 50)
     private String ageRating;
 
-    @Column(name = "caution", columnDefinition = "TEXT") 
+    @Column(name = "caution", columnDefinition = "TEXT")
     private String caution;
 
-    @Column(name = "poster_url", length = 255) 
+    @Column(name = "poster_url", length = 255)
     private String posterUrl;
 
-    @Column(name = "director", columnDefinition = "TEXT") 
+    @Column(name = "trailer_url", length = 255)
+    private String trailerUrl;
+
+    @Column(name = "director", columnDefinition = "TEXT")
     private String director;
 
     @ElementCollection
-    @CollectionTable(name = "movie_cast",
-            joinColumns = @JoinColumn(name = "movie_id")) // Định nghĩa bảng phụ cho danh sách diễn viên
-    @Column(name = "cast_member") 
+    @CollectionTable(name = "movie_cast", joinColumns = @JoinColumn(name = "movie_id"))
+    @Column(name = "cast_member")
     private List<String> cast;
 
-    @Column(name = "country", columnDefinition = "TEXT") 
+    @Column(name = "country", columnDefinition = "TEXT")
     private String country;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false) 
+    @Column(name = "status", nullable = false)
     private MovieStatus status;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "genre", nullable = false) 
-    private MovieGenre genre;
+    @Column(name = "type", nullable = false)
+    private MovieType type;
+
+    @ManyToMany
+    @JoinTable(
+            name = "movie_category",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories = new ArrayList<>();
 }

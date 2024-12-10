@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.security.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -32,9 +33,12 @@ public class Showtime {
     @Column(name = "end_time", nullable = false)
     private LocalDateTime endTime;
 
-    @Column(name = "price", nullable = false) 
-    private Double price;
 
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDate createdAt;
+
+    @Column(name = "update_at")
+    private LocalDate updatedAt;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)

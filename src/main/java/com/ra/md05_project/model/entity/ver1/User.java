@@ -1,6 +1,7 @@
 package com.ra.md05_project.model.entity.ver1;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.ra.md05_project.model.constant.UserStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,7 +40,8 @@ public class User {
     @Column(name = "role", length = 20, nullable = false)
     private String role;
 
-    @Column(name = "status")
+//    @Enumerated(EnumType.STRING)
+    @Column(name = "status",nullable = false)
     private Boolean status;
 
     @Column(name = "avatar")
@@ -47,7 +49,6 @@ public class User {
 
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
-
 
     @Column(name = "updated_at")
     private LocalDate updatedAt;
@@ -61,7 +62,7 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<Role> roles;
+    private Set<Roles> roles;
 
     @JsonIgnore
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

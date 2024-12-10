@@ -1,6 +1,6 @@
 package com.ra.md05_project.dto.user.register;
 
-import com.ra.md05_project.model.entity.ver1.Role;
+import com.ra.md05_project.model.entity.ver1.Roles;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -24,5 +24,5 @@ public class UserResponseDTO {
     private LocalDate createdAt;
     private LocalDate updatedAt;
     private Boolean isDeleted;
-    private Set<Role> roles;
+    private Set<Roles> roles;
 }

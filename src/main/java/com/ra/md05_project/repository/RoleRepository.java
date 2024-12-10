@@ -1,7 +1,9 @@
 package com.ra.md05_project.repository;
 
-import com.ra.md05_project.model.entity.ver1.Role;
+import com.ra.md05_project.model.entity.ver1.Roles;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface RoleRepository extends JpaRepository<Role, Long> {
+@Repository
+public interface RoleRepository extends JpaRepository<Roles, Long> {
 }
