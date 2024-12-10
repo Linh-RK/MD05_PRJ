@@ -1,7 +1,7 @@
 package com.ra.md05_project.advice;
 
-import com.ra.base_project_md4.exception.CustomException;
-import com.ra.base_project_md4.model.error.DataError;
+import com.ra.md05_project.exception.CustomException;
+import com.ra.md05_project.model.error.DataError;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

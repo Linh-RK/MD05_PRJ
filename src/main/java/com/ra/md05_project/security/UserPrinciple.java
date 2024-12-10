@@ -1,6 +1,6 @@
 package com.ra.md05_project.security;
 
-import com.ra.base_project_md4.model.entity.User;
+import com.ra.md05_project.model.entity.ver1.User;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,8 +1,8 @@
 package com.ra.md05_project.security.jwt;
 
-import com.ra.base_project_md4.model.entity.Token;
-import com.ra.base_project_md4.repository.TokenRepository;
-import com.ra.base_project_md4.security.UserPrinciple;
+import com.ra.md05_project.model.entity.ver1.Token;
+import com.ra.md05_project.repository.TokenRepository;
+import com.ra.md05_project.security.UserPrinciple;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

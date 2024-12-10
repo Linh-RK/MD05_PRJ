@@ -1,7 +1,7 @@
 package com.ra.md05_project.security;
 
-import com.ra.base_project_md4.security.jwt.JwtAuthTokenFilter;
-import com.ra.base_project_md4.security.jwt.JwtEntryPoint;
+import com.ra.md05_project.security.jwt.JwtAuthTokenFilter;
+import com.ra.md05_project.security.jwt.JwtEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

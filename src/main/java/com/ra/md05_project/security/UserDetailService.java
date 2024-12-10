@@ -1,7 +1,7 @@
 package com.ra.md05_project.security;
 
-import com.ra.base_project_md4.model.entity.User;
-import com.ra.base_project_md4.repository.UserRepository;
+import com.ra.md05_project.model.entity.ver1.User;
+import com.ra.md05_project.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
