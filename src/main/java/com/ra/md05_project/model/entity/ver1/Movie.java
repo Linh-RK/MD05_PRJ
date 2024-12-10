@@ -1,6 +1,5 @@
 package com.ra.md05_project.model.entity.ver1;
 
-import com.ra.md05_project.model.constant.MovieGenre;
 import com.ra.md05_project.model.constant.MovieStatus;
 import com.ra.md05_project.model.constant.MovieType;
 import jakarta.persistence.*;
@@ -8,7 +7,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -53,10 +51,8 @@ private Long id;
     @Column(name = "director", columnDefinition = "TEXT")
     private String director;
 
-    @ElementCollection
-    @CollectionTable(name = "movie_cast", joinColumns = @JoinColumn(name = "movie_id"))
     @Column(name = "cast_member")
-    private List<String> cast;
+    private String cast;
 
     @Column(name = "country", columnDefinition = "TEXT")
     private String country;

@@ -37,5 +37,4 @@ public class News {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // Getters and Setters
 }

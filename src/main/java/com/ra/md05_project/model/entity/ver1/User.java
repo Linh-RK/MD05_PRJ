@@ -40,7 +40,6 @@ public class User {
     @Column(name = "role", length = 20, nullable = false)
     private String role;
 
-//    @Enumerated(EnumType.STRING)
     @Column(name = "status",nullable = false)
     private Boolean status;
 

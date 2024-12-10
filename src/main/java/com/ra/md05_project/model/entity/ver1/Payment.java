@@ -44,5 +44,4 @@ public class Payment {
     @Column(name = "transaction_id", length = 255)
     private String transactionId;
 
-    // Getters and Setters
 }

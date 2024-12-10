@@ -58,8 +58,8 @@ public class Booking {
     )
     private List<Snack> snacks;
 
-    @ManyToOne
-    @JoinColumn(name = "coupon_id")
-    private Coupon coupon;
+//    @ManyToOne
+//    @JoinColumn(name = "coupon_id")
+//    private Coupon coupon;
 }
 
