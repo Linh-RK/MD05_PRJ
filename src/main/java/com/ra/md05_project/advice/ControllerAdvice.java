@@ -27,27 +27,26 @@ public class ControllerAdvice {
         });
         // Thêm một thông báo tổng quát vào map lỗi
         errors.put("message", "Data must be unique");
-
-        return new DataError<>(errors, HttpStatus.BAD_REQUEST.value()); // 400
+        return new DataError<>(errors, HttpStatus.BAD_REQUEST.value(),HttpStatus.BAD_REQUEST); // 400
     }
 
 
     @ExceptionHandler(NoSuchElementException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public DataError< String> handleNoSuchElementException(NoSuchElementException e) {
-        return new DataError<>(e.getMessage(),404); //400
+        return new DataError<>(e.getMessage(),404,HttpStatus.NOT_FOUND); //400
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public DataError< String> handleResourceNotFoundException(NoResourceFoundException e) {
-        return new DataError< String>(e.getMessage(), 404);
+        return new DataError< String>(e.getMessage(), 404, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public DataError< String> handleResourceNotFoundException(DataIntegrityViolationException e) {
-        return new DataError< String>(e.getMessage(), 400);
+        return new DataError< String>(e.getMessage(), 400, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(CustomException.class)
@@ -56,7 +55,6 @@ public class ControllerAdvice {
         errors.put("message",ex.getMessage());
         return ResponseEntity.badRequest().body(errors);
     }
-
 
 }
 

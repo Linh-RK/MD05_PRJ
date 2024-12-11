@@ -30,6 +30,9 @@ public class Token {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     private LocalDateTime createdAt;
     private LocalDateTime expiredAt;
 }

@@ -4,7 +4,6 @@ import com.ra.md05_project.model.constant.Payment;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -20,17 +19,11 @@ public class Booking {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "booking_time", nullable = false)
-    private LocalDate bookingTime;
-
     @Column(name = "total_price", nullable = false)
     private Double totalPrice;
 
     @Column(name = "total_seat", nullable = false)
     private Double totalSeat;
-
-    @Column(name = "status", nullable = false)
-    private String status;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -41,7 +34,7 @@ public class Booking {
 
     @ManyToOne
     @JoinColumn(name = "showtime_id", nullable = false)
-    private Showtime showtime;
+    private ShowTime showtime;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private List<BookingDetail> bookingDetails;
@@ -58,8 +51,7 @@ public class Booking {
     )
     private List<Snack> snacks;
 
-//    @ManyToOne
-//    @JoinColumn(name = "coupon_id")
-//    private Coupon coupon;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 }
 

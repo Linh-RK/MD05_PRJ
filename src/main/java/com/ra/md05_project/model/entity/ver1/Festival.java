@@ -26,6 +26,9 @@ public class Festival {
     @Column(name = "image", length = 255)
     private String image;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     @Column(name = "start_time", nullable = false)
     private LocalDateTime startTime;
 

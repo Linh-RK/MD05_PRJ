@@ -26,6 +26,9 @@ public class Snack {
     @Column(name = "type", nullable = false, length = 50)
     private String type;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     @ManyToMany
     @JoinTable(
             name = "booking_snack",

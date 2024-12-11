@@ -1,12 +1,10 @@
 package com.ra.md05_project.model.entity.ver1;
-import com.ra.md05_project.model.constant.PaymentMethod;
 import com.ra.md05_project.model.constant.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -21,7 +19,7 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "booking_id", nullable = false) // Khóa ngoại đến Booking
@@ -29,7 +27,7 @@ public class Payment {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_method", nullable = false)
-    private PaymentMethod paymentMethod; // Enum VIETQR, VNPAY, VIETTEL_PAY, PAYPAL
+    private com.ra.md05_project.model.constant.Payment paymentMethod; // Enum VIETQR, VNPAY, VIETTEL_PAY, PAYPAL
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_status", nullable = false)

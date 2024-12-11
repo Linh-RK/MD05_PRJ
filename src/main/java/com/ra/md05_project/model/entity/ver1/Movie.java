@@ -17,9 +17,9 @@ import java.util.List;
 @Builder
 public class Movie {
     @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
-@Column(name = "id")
-private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
     @Column(name = "title", length = 255, nullable = false)
     private String title;
@@ -56,6 +56,9 @@ private Long id;
 
     @Column(name = "country", columnDefinition = "TEXT")
     private String country;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)

@@ -45,8 +45,11 @@ dependencies {
     implementation group: 'javax.validation', name: 'validation-api', version: '1.0.0.GA'
     // https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
-    // https://mvnrepository.com/artifact/org.apache.poi/poi
-    implementation group: 'org.apache.poi', name: 'poi', version: '5.2.3'
+// https://mvnrepository.com/artifact/org.apache.poi/poi
+    implementation 'org.apache.poi:poi-ooxml:5.2.3'
+    // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44
+    implementation group: 'com.cloudinary', name: 'cloudinary-http44', version: '1.2.1'
+
 }
 
 tasks.named('test') {

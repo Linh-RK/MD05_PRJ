@@ -31,6 +31,9 @@ public class Seat {
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 20)
     private SeatStatus status;
+
+//    @Column(name = "is_deleted")
+//    private Boolean isDeleted;
 }
 
 

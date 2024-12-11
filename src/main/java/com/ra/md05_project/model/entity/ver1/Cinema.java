@@ -26,6 +26,9 @@ public class Cinema {
     @Column(name = "phone_number", length = 15)
     private String phoneNumber;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     @Column(name = "created_date", nullable = false)
     private LocalDateTime createdDate;
 

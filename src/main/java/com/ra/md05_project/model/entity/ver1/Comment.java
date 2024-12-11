@@ -31,6 +31,9 @@ public class Comment {
     @Column(name = "parent_comment_id")
     private Long parentCommentId;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false) // Khóa ngoại liên kết với User
     private User user;

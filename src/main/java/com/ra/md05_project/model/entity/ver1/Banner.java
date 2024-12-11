@@ -18,7 +18,10 @@ public class Banner {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
+
+    @Column(name = "banner_name", nullable = false, length = 255)
+    private String bannerName;
 
     @Column(name = "url", nullable = false, length = 255)
     private String url;
@@ -29,5 +32,8 @@ public class Banner {
 
     @Column(name = "position", nullable = false, length = 255)
     private String position;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 }
 

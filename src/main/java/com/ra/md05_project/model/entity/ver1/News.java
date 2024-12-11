@@ -27,6 +27,9 @@ public class News {
     @Column(name = "content", columnDefinition = "LONGTEXT")
     private String content;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
     @ManyToOne
     @JoinColumn(name = "festival_id", nullable = true) // Khóa ngoại đến Festival
     private Festival festival;

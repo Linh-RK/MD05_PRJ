@@ -25,5 +25,8 @@ public class Room {
     @ManyToOne
     @JoinColumn(name = "cinema_id", nullable = false) // Đặt tên cho khóa ngoại liên kết với Cinema
     private Cinema cinema;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 }
 

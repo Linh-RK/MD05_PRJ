@@ -38,4 +38,7 @@ public class TicketPrice {
     @Column(name = "price", nullable = false)
     private Double price;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
 }

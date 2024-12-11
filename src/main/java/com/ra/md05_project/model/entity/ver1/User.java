@@ -28,25 +28,22 @@ public class User {
     @Column(name = "password", length = 255, nullable = false)
     private String password;
 
-    @Column(name = "email", length = 100, nullable = false)
+    @Column(name = "email", length = 100)
     private String email;
 
-    @Column(name = "full_name", length = 100, nullable = false)
+    @Column(name = "full_name", length = 100)
     private String fullName;
 
-    @Column(name = "phone_number", length = 15, nullable = false)
+    @Column(name = "phone_number", length = 15)
     private String phoneNumber;
 
-    @Column(name = "role", length = 20, nullable = false)
-    private String role;
-
-    @Column(name = "status",nullable = false)
+    @Column(name = "status")
     private Boolean status;
 
     @Column(name = "avatar")
     private String avatar;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDate createdAt;
 
     @Column(name = "updated_at")

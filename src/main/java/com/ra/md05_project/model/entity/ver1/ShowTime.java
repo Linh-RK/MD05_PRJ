@@ -3,7 +3,6 @@ import com.ra.md05_project.model.constant.MovieType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.security.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -13,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Showtime {
+public class ShowTime {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id") 
@@ -39,6 +38,9 @@ public class Showtime {
 
     @Column(name = "update_at")
     private LocalDate updatedAt;
+
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)

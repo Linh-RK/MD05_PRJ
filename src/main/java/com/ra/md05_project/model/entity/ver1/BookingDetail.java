@@ -33,5 +33,8 @@ public class BookingDetail {
     @JoinColumn(name = "seat_id", nullable = false) // Liên kết với bảng Seat
     private Seat seat;
 
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
+
 }
 

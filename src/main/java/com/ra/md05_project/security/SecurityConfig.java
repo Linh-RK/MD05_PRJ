@@ -33,8 +33,8 @@ public class SecurityConfig {
                 csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth->{
-                    auth.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
-                    auth.requestMatchers("/cart/**").authenticated();
+//                    auth.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
+//                    auth.requestMatchers("/cart/**").authenticated();
                     auth.anyRequest().permitAll();
                 }).sessionManagement(auth->auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
                 exceptionHandling(auth->auth.authenticationEntryPoint(jwtEntryPoint)).

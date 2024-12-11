@@ -1,6 +1,8 @@
 package com.ra.md05_project.repository;
 
 import com.ra.md05_project.model.entity.ver1.TicketPrice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +17,7 @@ public interface TicketPriceRepository extends JpaRepository<TicketPrice, Long> 
                      @Param("seatType") String seatType,
                      @Param("dayType") String dayType,
                      @Param("timeSlot") String timeSlot);
+
+
+    Page<TicketPrice> findByMovieTypeContainingIgnoreCaseOrSeatTypeContainingIgnoreCase(String search, String search1, Pageable pageable);
 }
