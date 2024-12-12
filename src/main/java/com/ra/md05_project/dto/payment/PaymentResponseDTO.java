@@ -1,8 +1,8 @@
 package com.ra.md05_project.dto.payment;
 
+import com.ra.md05_project.model.constant.PaymentMethod;
 import com.ra.md05_project.model.constant.PaymentStatus;
 import com.ra.md05_project.model.entity.ver1.Booking;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ public class PaymentResponseDTO {
 
     private Booking booking;
 
-    private com.ra.md05_project.model.constant.Payment paymentMethod; // Enum VIETQR, VNPAY, VIETTEL_PAY, PAYPAL
+    private PaymentMethod paymentMethod; // Enum VIETQR, VNPAY, VIETTEL_PAY, PAYPAL
 
     private PaymentStatus paymentStatus; // Enum PENDING, COMPLETED, FAILED, CANCELLED
 

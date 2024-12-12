@@ -1,6 +1,6 @@
 package com.ra.md05_project.dto.booking;
 
-import com.ra.md05_project.model.constant.Payment;
+import com.ra.md05_project.model.constant.PaymentMethod;
 import com.ra.md05_project.model.entity.ver1.BookingDetail;
 import com.ra.md05_project.model.entity.ver1.ShowTime;
 import com.ra.md05_project.model.entity.ver1.Snack;
@@ -29,7 +29,7 @@ public class BookingResponseDTO {
 
     private List<BookingDetail> bookingDetails;
 
-    private Payment payment;
+    private PaymentMethod paymentMethod;
 
     private List<Snack> snacks;
 }

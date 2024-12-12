@@ -1,11 +1,14 @@
 package com.ra.md05_project.controller.admin;
 
 import com.ra.md05_project.dto.movie.MovieAddDTO;
+import com.ra.md05_project.dto.movie.MovieResponseDTO;
 import com.ra.md05_project.dto.movie.MovieUpdateDTO;
 import com.ra.md05_project.dto.user.ResponseDTOSuccess;
 import com.ra.md05_project.model.entity.ver1.Festival;
 import com.ra.md05_project.model.entity.ver1.Movie;
+import com.ra.md05_project.service.festival.FestivalService;
 import com.ra.md05_project.service.movie.MovieService;
+import com.ra.md05_project.service.movie.MovieServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,7 +30,7 @@ public class ADMovieController {
     private MovieService movieService;
 
     @GetMapping
-    public ResponseEntity<Page<Movie>> findAllMovie(
+    public ResponseEntity<Page<MovieResponseDTO>> findAllMovie(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "3") int size,
             @RequestParam(name = "search", defaultValue = "") String search,
@@ -37,23 +40,28 @@ public class ADMovieController {
         Sort sortOrder = Sort.by(sort);
         sortOrder = direction.equalsIgnoreCase("desc") ? sortOrder.descending() : sortOrder.ascending();
         Pageable pageable = PageRequest.of(page, size, sortOrder);
-        Page<Movie> Movies = movieService.findAll(search ,pageable );
-        return new ResponseEntity<>(Movies, HttpStatus.OK);
+        Page<Movie> movies = movieService.findAll(search ,pageable );
+        // Map to MovieResponseDTO
+        Page<MovieResponseDTO> responseDTOs = movies.map(movieService::mapToResponseDTO);
+        return new ResponseEntity<>(responseDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Movie> getBookingById (@PathVariable Long id) {
-        return new ResponseEntity<>(movieService.findById(id), HttpStatus.OK);
+    public ResponseEntity<MovieResponseDTO> getMovieById(@PathVariable Long id) {
+        Movie movie = movieService.findById(id);
+        return new ResponseEntity<>(movieService.mapToResponseDTO(movie), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Movie> createMovie(@Valid @RequestBody MovieAddDTO movieAddDTO) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(movieService.create(movieAddDTO));
+    public ResponseEntity<MovieResponseDTO> createMovie(@Valid @ModelAttribute MovieAddDTO movieAddDTO) throws IOException {
+        Movie movie = movieService.create(movieAddDTO);
+        return  new ResponseEntity<>(movieService.mapToResponseDTO(movie), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Movie> updateMovie(@PathVariable Long id,@Valid @RequestBody MovieUpdateDTO movieUpdateDTO) throws IOException {
-            return new ResponseEntity<>(movieService.update(id, movieUpdateDTO), HttpStatus.OK);
+    public ResponseEntity<MovieResponseDTO> updateMovie(@PathVariable Long id,@Valid @ModelAttribute MovieUpdateDTO movieUpdateDTO) throws IOException {
+        Movie movie = movieService.update(id, movieUpdateDTO);
+            return new ResponseEntity<>(movieService.mapToResponseDTO(movie), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

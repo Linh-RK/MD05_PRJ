@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Long> {
 
+    Page<Seat> findAllByIsDeletedIsFalse(Pageable pageable);
 
-    Page<Seat> findByRowNumberContainingIgnoreCaseOrSeatNumberContaining(String search, String search1, Pageable pageable);
+    Page<Seat> findByRowNumberContainingIgnoreCaseOrSeatNumberContainingAndIsDeletedIsFalse(String search, String search1, Pageable pageable);
 }

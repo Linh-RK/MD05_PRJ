@@ -3,6 +3,7 @@ package com.ra.md05_project.model.entity.ver1;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,9 +31,9 @@ public class Cinema {
     private Boolean isDeleted;
 
     @Column(name = "created_date", nullable = false)
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
 
     @Column(name = "updated_date", nullable = false)
-    private LocalDateTime updatedDate;
+    private LocalDate updatedDate;
 }
 

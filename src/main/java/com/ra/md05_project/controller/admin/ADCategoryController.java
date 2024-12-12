@@ -2,6 +2,7 @@ package com.ra.md05_project.controller.admin;
 
 
 import com.ra.md05_project.dto.category.CategoryDTO;
+import com.ra.md05_project.dto.category.CategoryResponseDTO;
 import com.ra.md05_project.dto.user.ResponseDTOSuccess;
 import com.ra.md05_project.model.entity.ver1.Category;
 import com.ra.md05_project.service.category.CategoryService;
@@ -24,7 +25,7 @@ public class ADCategoryController {
     private CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<Page<Category>> findAllCategory(
+    public ResponseEntity<Page<CategoryResponseDTO>> findAllCategory(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "3") int size,
             @RequestParam(name = "search", defaultValue = "") String search,
@@ -34,22 +35,22 @@ public class ADCategoryController {
         Sort sortOrder = Sort.by(sort);
         sortOrder = direction.equalsIgnoreCase("desc") ? sortOrder.descending() : sortOrder.ascending();
         Pageable pageable = PageRequest.of(page, size, sortOrder);
-        Page<Category> categories = categoryService.findAll(search ,pageable );
+        Page<CategoryResponseDTO> categories = categoryService.findAll(search ,pageable );
         return new ResponseEntity<>(categories, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getBookingById (@PathVariable Long id) {
+    public ResponseEntity<CategoryResponseDTO> getCategoryById (@PathVariable Long id) {
         return new ResponseEntity<>(categoryService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Category> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) throws IOException {
+    public ResponseEntity<CategoryResponseDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) throws IOException {
         return new ResponseEntity<>(categoryService.create(categoryDTO), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable Long id,@Valid @RequestBody Category category) throws IOException {
+    public ResponseEntity<CategoryResponseDTO> updateCategory(@PathVariable Long id,@Valid @RequestBody Category category) throws IOException {
             return new ResponseEntity<>(categoryService.update(id, category), HttpStatus.OK);
     }
 

@@ -1,6 +1,7 @@
 package com.ra.md05_project.controller.admin;
 
 import com.ra.md05_project.dto.seat.SeatAddDTO;
+import com.ra.md05_project.dto.seat.SeatResponseDTO;
 import com.ra.md05_project.dto.seat.SeatUpdateDTO;
 import com.ra.md05_project.dto.user.ResponseDTOSuccess;
 import com.ra.md05_project.model.entity.ver1.Festival;
@@ -25,7 +26,7 @@ public class ADSeatController {
     private SeatService seatService;
 
     @GetMapping
-    public ResponseEntity<Page<Seat>> findAllSeat(
+    public ResponseEntity<Page<SeatResponseDTO>> findAllSeat(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "3") int size,
             @RequestParam(name = "search", defaultValue = "") String search,
@@ -35,22 +36,22 @@ public class ADSeatController {
         Sort sortOrder = Sort.by(sort);
         sortOrder = direction.equalsIgnoreCase("desc") ? sortOrder.descending() : sortOrder.ascending();
         Pageable pageable = PageRequest.of(page, size, sortOrder);
-        Page<Seat> seats = seatService.findAll(search ,pageable );
+        Page<SeatResponseDTO> seats = seatService.findAll(search ,pageable );
         return new ResponseEntity<>(seats, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Seat> getBookingById (@PathVariable Long id) {
+    public ResponseEntity<SeatResponseDTO> getSeatById (@PathVariable Long id) {
         return new ResponseEntity<>(seatService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Seat> createSeat(@Valid @RequestBody SeatAddDTO seatAddDTO) throws IOException {
+    public ResponseEntity<SeatResponseDTO> createSeat(@Valid @RequestBody SeatAddDTO seatAddDTO) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED).body(seatService.create(seatAddDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Seat> updateSeat(@PathVariable Long id,@Valid @RequestBody SeatUpdateDTO seatUpdateDTO) throws IOException {
+    public ResponseEntity<SeatResponseDTO> updateSeat(@PathVariable Long id,@Valid @RequestBody SeatUpdateDTO seatUpdateDTO) throws IOException {
             return new ResponseEntity<>(seatService.update(id, seatUpdateDTO), HttpStatus.OK);
 
     }

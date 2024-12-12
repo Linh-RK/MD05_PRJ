@@ -5,6 +5,7 @@ import jakarta.persistence.Table;
 import lombok.*;
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,7 +19,7 @@ public class Festival {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "title", nullable = false, length = 255)
     private String title;
@@ -30,9 +31,9 @@ public class Festival {
     private Boolean isDeleted;
 
     @Column(name = "start_time", nullable = false)
-    private LocalDateTime startTime;
+    private LocalDate startTime;
 
     @Column(name = "end_time", nullable = false)
-    private LocalDateTime endTime;
+    private LocalDate endTime;
 
 }

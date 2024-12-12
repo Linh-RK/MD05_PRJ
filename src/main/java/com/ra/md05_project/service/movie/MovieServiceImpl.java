@@ -1,43 +1,50 @@
 package com.ra.md05_project.service.movie;
 
 import com.ra.md05_project.dto.movie.MovieAddDTO;
+import com.ra.md05_project.dto.movie.MovieResponseDTO;
 import com.ra.md05_project.dto.movie.MovieUpdateDTO;
+import com.ra.md05_project.model.entity.ver1.Category;
 import com.ra.md05_project.model.entity.ver1.Movie;
+import com.ra.md05_project.repository.CategoryRepository;
 import com.ra.md05_project.repository.MovieRepository;
+import com.ra.md05_project.service.uploadFile.UploadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
-
+import java.util.stream.Collectors;
 @Service
 public class MovieServiceImpl implements MovieService {
 
     @Autowired
     private MovieRepository movieRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
+    @Autowired
+    private UploadService uploadService;
 
     @Override
     public Page<Movie> findAll(String search, Pageable pageable) {
-        if (search == null || search.isBlank()) {
-            return movieRepository.findAll(pageable);
-        }
-        return movieRepository.findByTitleContainingIgnoreCase(search, pageable);
+        return (search == null || search.isBlank())
+                ? movieRepository.findAll(pageable)
+                : movieRepository.findByTitleContainingIgnoreCase(search, pageable);
     }
 
     @Override
     public void delete(Long id) {
-        Movie movie = movieRepository.findById(id).orElseThrow(() ->
-                new NoSuchElementException("Movie with id " + id + " not found"));
+        Movie movie = findMovieById(id);
         movie.setIsDeleted(true);
-        movieRepository.save(movie); // Soft delete
+        movieRepository.save(movie);
     }
 
     @Override
-    public Movie create(MovieAddDTO movieAddDTO) {
-        Movie movie = mapToEntity(movieAddDTO);
+    public Movie create(MovieAddDTO dto) throws IOException {
+        Movie movie = mapToEntity(dto);
         validateMovie(movie);
         movie.setIsDeleted(false);
         return movieRepository.save(movie);
@@ -45,50 +52,65 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie findById(Long id) {
-        return movieRepository.findById(id).orElseThrow(()-> new NoSuchElementException("Movie with id " + id + " not found"));
+        return findMovieById(id);
     }
 
     @Override
-    public Movie update(Long id, MovieUpdateDTO movieUpdateDTO) {
-        Movie existingMovie = movieRepository.findById(id).orElseThrow(() ->
-                new NoSuchElementException("Movie with id " + id + " not found"));
+    public Movie update(Long id, MovieUpdateDTO dto) throws IOException {
+        Movie existingMovie = findMovieById(id);
+        validateMovie(existingMovie);
 
-        Movie updatedMovie = mapToEntity(movieUpdateDTO);
-        validateMovie(updatedMovie);
+        String posterUrl = (dto.getPosterUrl() != null && !dto.getPosterUrl().isEmpty())
+                ? uploadService.uploadFile(dto.getPosterUrl())
+                : existingMovie.getPosterUrl();
+        String trailerUrl = (dto.getTrailerUrl() != null && !dto.getTrailerUrl().isEmpty())
+                ? uploadService.uploadFile(dto.getTrailerUrl())
+                : existingMovie.getTrailerUrl();
 
-        existingMovie = Movie.builder()
-                .id(existingMovie.getId()) // Preserve ID
-                .title(updatedMovie.getTitle())
-                .description(updatedMovie.getDescription())
-                .duration(updatedMovie.getDuration())
-                .releaseDate(updatedMovie.getReleaseDate())
-                .language(updatedMovie.getLanguage())
-                .ageRating(updatedMovie.getAgeRating())
-                .caution(updatedMovie.getCaution())
-                .posterUrl(updatedMovie.getPosterUrl())
-                .trailerUrl(updatedMovie.getTrailerUrl())
-                .director(updatedMovie.getDirector())
-                .cast(updatedMovie.getCast())
-                .country(updatedMovie.getCountry())
-                .status(updatedMovie.getStatus())
-                .type(updatedMovie.getType())
-                .categories(updatedMovie.getCategories())
-                .isDeleted(existingMovie.getIsDeleted())
-                .build();
+        Movie movieToSave = mapToEntity(dto);
+        movieToSave.setId(existingMovie.getId());
+        movieToSave.setPosterUrl(posterUrl);
+        movieToSave.setTrailerUrl(trailerUrl);
+        movieToSave.setIsDeleted(existingMovie.getIsDeleted());
 
-        return movieRepository.save(existingMovie);
+        return movieRepository.save(movieToSave);
     }
 
-    private void validateMovie(Movie movie) {
-        if (movie.getReleaseDate().isAfter(LocalDate.now())) {
+    @Override
+    public MovieResponseDTO mapToResponseDTO(Movie movie) {
+        return MovieResponseDTO.builder()
+                .id(movie.getId())
+                .title(movie.getTitle())
+                .description(movie.getDescription())
+                .duration(movie.getDuration())
+                .releaseDate(movie.getReleaseDate())
+                .language(movie.getLanguage())
+                .ageRating(movie.getAgeRating())
+                .caution(movie.getCaution())
+                .posterUrl(movie.getPosterUrl())
+                .trailerUrl(movie.getTrailerUrl())
+                .director(movie.getDirector())
+                .cast(movie.getCast())
+                .country(movie.getCountry())
+                .status(movie.getStatus())
+                .type(movie.getType())
+                .categoriesId(movie.getCategories().stream()
+                        .map(Category::getId)
+                        .collect(Collectors.toList()))
+                .build();
+    }
+
+    private void validateMovie(Movie dto) {
+        if (dto.getReleaseDate().isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("Release date cannot be in the future");
         }
-        if (movie.getDuration() <= 0) {
+        if (dto.getDuration() <= 0) {
             throw new IllegalArgumentException("Duration must be a positive value");
         }
     }
 
-    private Movie mapToEntity(MovieAddDTO dto) {
+    private Movie mapToEntity(MovieAddDTO dto) throws IOException {
+        List<Category> categories = categoryRepository.findAllById(dto.getCategoryIds());
         return Movie.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
@@ -96,19 +118,19 @@ public class MovieServiceImpl implements MovieService {
                 .releaseDate(dto.getReleaseDate())
                 .language(dto.getLanguage())
                 .ageRating(dto.getAgeRating())
-                .caution(dto.getCaution())
-                .posterUrl(dto.getPosterUrl())
-                .trailerUrl(dto.getTrailerUrl())
+                .posterUrl(uploadService.uploadFile(dto.getPosterUrl()))
+                .trailerUrl(uploadService.uploadFile(dto.getTrailerUrl()))
                 .director(dto.getDirector())
                 .cast(dto.getCast())
                 .country(dto.getCountry())
                 .status(dto.getStatus())
                 .type(dto.getType())
-                .categories(dto.getCategories())
+                .categories(categories)
                 .build();
     }
 
-    private Movie mapToEntity(MovieUpdateDTO dto) {
+    private Movie mapToEntity(MovieUpdateDTO dto) throws IOException {
+        List<Category> categories = categoryRepository.findAllById(dto.getCategoryIds());
         return Movie.builder()
                 .title(dto.getTitle())
                 .description(dto.getDescription())
@@ -116,15 +138,18 @@ public class MovieServiceImpl implements MovieService {
                 .releaseDate(dto.getReleaseDate())
                 .language(dto.getLanguage())
                 .ageRating(dto.getAgeRating())
-                .caution(dto.getCaution())
-                .posterUrl(dto.getPosterUrl())
-                .trailerUrl(dto.getTrailerUrl())
+//                .trailerUrl(dto.getTrailerUrl())
                 .director(dto.getDirector())
                 .cast(dto.getCast())
                 .country(dto.getCountry())
                 .status(dto.getStatus())
                 .type(dto.getType())
-                .categories(dto.getCategories())
+                .categories(categories)
                 .build();
+    }
+
+    private Movie findMovieById(Long id) {
+        return movieRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Movie with id " + id + " not found"));
     }
 }

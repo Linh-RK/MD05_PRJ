@@ -1,7 +1,11 @@
 package com.ra.md05_project.dto.festival;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -10,13 +14,15 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class FestivalUpdateDTO {
-    private Long id;
-
+    @NotBlank(message = "Title is mandatory")
     private String title;
 
-    private String image;
+    private MultipartFile image;
 
-    private LocalDateTime startTime;
+    @NotNull(message = "Start time is mandatory")
+    private LocalDate startTime;
 
-    private LocalDateTime endTime;
+    @NotNull(message = "End time is mandatory")
+    private LocalDate endTime;
+
 }

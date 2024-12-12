@@ -2,6 +2,7 @@ package com.ra.md05_project.service.room;
 
 import com.ra.md05_project.dto.room.RoomAddDTO;
 import com.ra.md05_project.dto.room.RoomUpdateDTO;
+import com.ra.md05_project.model.constant.RoomStatus;
 import com.ra.md05_project.model.entity.ver1.Cinema;
 import com.ra.md05_project.model.entity.ver1.Room;
 import com.ra.md05_project.repository.CinemaRepository;
@@ -28,9 +29,9 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public Page<Room> findAll(String search, Pageable pageable) {
         if (search.isEmpty()) {
-            return roomRepository.findAll(pageable);
+            return roomRepository.findAllByIsDeletedIsFalse(pageable);
         } else {
-            return roomRepository.findByRoomNameContainingIgnoreCaseOrStatusContainingIgnoreCase(search, search, pageable);
+            return roomRepository.findByRoomNameContainingIgnoreCaseOrStatusContainingIgnoreCaseAndIsDeletedIsFalse(search, search, pageable);
         }
     }
 
@@ -53,7 +54,7 @@ public class RoomServiceImpl implements RoomService {
 
         Room room = Room.builder()
                 .roomName(roomAddDTO.getRoomName())
-                .status(roomAddDTO.getStatus())
+                .status(RoomStatus.ACTIVE)
                 .cinema(cinema)
                 .isDeleted(false)
                 .build();
@@ -71,6 +72,7 @@ public class RoomServiceImpl implements RoomService {
                .id(id)
                 .roomName(roomUpdateDTO.getRoomName())
                 .status(roomUpdateDTO.getStatus())
+                .isDeleted(false)
                 .cinema(cinemaRepository.findById(roomUpdateDTO.getCinemaId())
                         .orElseThrow(() -> new NoSuchElementException("Cinema not found")))
                 .build();

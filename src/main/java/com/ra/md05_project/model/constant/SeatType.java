@@ -1,7 +1,7 @@
 package com.ra.md05_project.model.constant;
 
 public enum SeatType {
-    NORMAL,
+    STANDARD,
     VIP,
     SWEET_BOX
 }

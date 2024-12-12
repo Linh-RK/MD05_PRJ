@@ -1,6 +1,7 @@
 package com.ra.md05_project.service.news;
 
 import com.ra.md05_project.dto.news.NewsAddDTO;
+import com.ra.md05_project.dto.news.NewsResponseDTO;
 import com.ra.md05_project.dto.news.NewsUpdateDTO;
 import com.ra.md05_project.model.entity.ver1.News;
 import jakarta.validation.Valid;
@@ -11,13 +12,13 @@ import java.io.IOException;
 import java.util.Optional;
 
 public interface NewsService {
-    Page<News> findAll(String search, Pageable pageable);
+    Page<NewsResponseDTO> findAll(String search, Pageable pageable);
 
     void delete(Long id);
 
-    News create(@Valid NewsAddDTO news) throws IOException;
+    NewsResponseDTO create(@Valid NewsAddDTO news) throws IOException;
 
-    News findById(Long id);
+    NewsResponseDTO findById(Long id);
 
-    News update(Long id, @Valid NewsUpdateDTO news) throws IOException;
+    NewsResponseDTO update(Long id, @Valid NewsUpdateDTO news) throws IOException;
 }

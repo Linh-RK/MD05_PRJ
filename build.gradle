@@ -37,7 +37,7 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     // https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
-// https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
     implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.0'
     // https://mvnrepository.com/artifact/org.hibernate/hibernate-validator
     implementation group: 'org.hibernate', name: 'hibernate-validator', version: '6.1.0.Final'
@@ -45,7 +45,7 @@ dependencies {
     implementation group: 'javax.validation', name: 'validation-api', version: '1.0.0.GA'
     // https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils
     implementation group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
-// https://mvnrepository.com/artifact/org.apache.poi/poi
+    // https://mvnrepository.com/artifact/org.apache.poi/poi
     implementation 'org.apache.poi:poi-ooxml:5.2.3'
     // https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44
     implementation group: 'com.cloudinary', name: 'cloudinary-http44', version: '1.2.1'

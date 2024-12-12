@@ -32,7 +32,6 @@ public class ShowTime {
     @Column(name = "end_time", nullable = false)
     private LocalDateTime endTime;
 
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDate createdAt;
 

@@ -10,5 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Long> {
 
-    Page<Room> findByRoomNameContainingIgnoreCaseOrStatusContainingIgnoreCase(String search, String search1, Pageable pageable);
+    Page<Room> findAllByIsDeletedIsFalse(Pageable pageable);
+
+    Page<Room> findByRoomNameContainingIgnoreCaseOrStatusContainingIgnoreCaseAndIsDeletedIsFalse(String search, String search1, Pageable pageable);
 }

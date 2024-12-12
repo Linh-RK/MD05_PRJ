@@ -1,6 +1,10 @@
 package com.ra.md05_project.service.bookingDetail;
 
 import com.ra.md05_project.dto.bookingDetail.BookingDetailAddDTO;
+import com.ra.md05_project.model.constant.DayType;
+import com.ra.md05_project.model.constant.MovieType;
+import com.ra.md05_project.model.constant.SeatType;
+import com.ra.md05_project.model.constant.TimeSlot;
 import com.ra.md05_project.model.entity.ver1.Booking;
 import com.ra.md05_project.model.entity.ver1.BookingDetail;
 import com.ra.md05_project.model.entity.ver1.Seat;
@@ -26,18 +30,18 @@ public class BookingDetailServiceImpl implements BookingDetailService {
         Booking booking = bookingDetail.getBooking();
         Seat seat = bookingDetail.getSeat();
 
-        String movieType = booking.getShowtime().getMovie().getType().name();
-        String seatType = seat.getType();
+        MovieType movieType = booking.getShowtime().getMovie().getType();
+        SeatType seatType = seat.getType();
         LocalDateTime showtimeStart = booking.getShowtime().getStartTime();
         int movieDuration = booking.getShowtime().getMovie().getDuration();
 
         // Xác định loại ngày: WEEKDAY, WEEKEND, HOLIDAY
         DayOfWeek dayOfWeek = showtimeStart.getDayOfWeek();
-        String dayType = isHoliday(showtimeStart.toLocalDate()) ? "HOLIDAY" :
-                (dayOfWeek == DayOfWeek.FRIDAY || dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) ? "WEEKEND" : "WEEKDAY";
+        DayType dayType = isHoliday(showtimeStart.toLocalDate()) ? DayType.HOLIDAY :
+                (dayOfWeek == DayOfWeek.FRIDAY || dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) ? DayType.WEEKEND : DayType.WEEKDAY;
 
         // Xác định khung giờ
-        String timeSlot = getTimeSlot(showtimeStart.getHour());
+        TimeSlot timeSlot = getTimeSlot(showtimeStart.getHour());
 
         // Truy vấn giá từ cơ sở dữ liệu
         Double basePrice = ticketPriceRepository.findPrice(movieType, seatType, dayType, timeSlot);
@@ -67,11 +71,11 @@ public class BookingDetailServiceImpl implements BookingDetailService {
         return Optional.empty();
     }
 
-    private String getTimeSlot(int hour) {
-        if (hour < 12) return "BEFORE_12";
-        if (hour < 17) return "FROM_12_TO_17";
-        if (hour < 23) return "FROM_17_TO_23";
-        return "AFTER_23";
+    private TimeSlot getTimeSlot(int hour) {
+        if (hour < 12) return TimeSlot.MORNING;
+        if (hour < 17) return TimeSlot.AFTERNOON;
+        if (hour < 23) return TimeSlot.EVENING;
+        return TimeSlot.MIDDLE_NIGHT;
     }
 
     private boolean isHoliday(LocalDate date) {

@@ -24,9 +24,9 @@ public class TicketPriceServiceImpl implements TicketPriceService {
     public Page<TicketPrice> findAll(String search, Pageable pageable) {
         // Tìm kiếm theo loại phim, loại ghế
         if (search == null || search.isEmpty()) {
-            return ticketPriceRepository.findAll(pageable);
+            return ticketPriceRepository.findAllByIsDeletedIsFalse(pageable);
         } else {
-            return ticketPriceRepository.findByMovieTypeContainingIgnoreCaseOrSeatTypeContainingIgnoreCase(search, search, pageable);
+            return ticketPriceRepository.findByMovieTypeContainingIgnoreCaseOrSeatTypeContainingIgnoreCaseAndIsDeletedIsFalse(search, search, pageable);
         }
     }
 

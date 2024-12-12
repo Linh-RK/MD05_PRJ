@@ -1,28 +1,29 @@
 package com.ra.md05_project.dto.news;
 
-import com.ra.md05_project.model.entity.ver1.Festival;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class NewResponseDTO {
+public class NewsResponseDTO {
     private Long id;
 
     private String title;
 
     private String content;
 
-    private Festival festival;
+    private Long festivalId;
 
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+    private List<String> imagesUrl;
+
 }

@@ -12,7 +12,10 @@ import java.util.Optional;
 @Repository
 public interface CinemaRepository extends JpaRepository<Cinema, Long> {
 
-    Page<Cinema> findByNameContainingIgnoreCaseAndIsDeletedFalse(String search, Pageable pageable);
 
     Optional<Cinema> findByIdAndIsDeletedFalse(Long id);
+
+    Page<Cinema> findAllByIsDeletedIsFalse(Pageable pageable);
+
+    Page<Cinema> findByNameContainingIgnoreCaseAndIsDeletedFalseAndIsDeletedIsFalse(String search, Pageable pageable);
 }

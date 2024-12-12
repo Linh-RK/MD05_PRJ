@@ -1,6 +1,7 @@
 package com.ra.md05_project.dto.seat;
 
 import com.ra.md05_project.model.constant.SeatStatus;
+import com.ra.md05_project.model.constant.SeatType;
 import com.ra.md05_project.model.entity.ver1.Room;
 import jakarta.persistence.*;
 import lombok.*;
@@ -13,13 +14,15 @@ import lombok.*;
 public class SeatResponseDTO {
     private Long id;
 
-    private Room room;
+    private Long roomId;
 
-    private String rowNumber;
+    private Long cinemaId;
 
-    private Integer seatNumber;
+    private String seatName; // = CONCAT(rowNumber,seatNumber)
 
-    private String type;
+    private SeatType type;
 
     private SeatStatus status;
+
+    private Boolean isDeleted;
 }

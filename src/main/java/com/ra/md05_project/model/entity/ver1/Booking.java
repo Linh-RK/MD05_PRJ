@@ -1,6 +1,6 @@
 package com.ra.md05_project.model.entity.ver1;
 
-import com.ra.md05_project.model.constant.Payment;
+import com.ra.md05_project.model.constant.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,7 +41,7 @@ public class Booking {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "payment", nullable = false)
-    private Payment payment;
+    private PaymentMethod paymentMethod;
 
     @ManyToMany
     @JoinTable(

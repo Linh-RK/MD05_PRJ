@@ -17,9 +17,9 @@ import java.time.LocalDateTime;
 public class ShowTimeResponseDTO {
     private Long id;
 
-    private Movie movie;
+    private Long movieId;
 
-    private Room room;
+    private Long roomId;
 
     private LocalDateTime startTime;
 
@@ -28,6 +28,8 @@ public class ShowTimeResponseDTO {
     private LocalDate createdAt;
 
     private LocalDate updatedAt;
+
+    private Boolean isDeleted;
 
     private MovieType type;
 }

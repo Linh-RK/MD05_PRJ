@@ -1,10 +1,9 @@
 package com.ra.md05_project.controller.admin;
 
 import com.ra.md05_project.dto.showtime.ShowTimeAddDTO;
+import com.ra.md05_project.dto.showtime.ShowTimeResponseDTO;
 import com.ra.md05_project.dto.showtime.ShowTimeUpdateDTO;
 import com.ra.md05_project.dto.user.ResponseDTOSuccess;
-import com.ra.md05_project.model.entity.ver1.Festival;
-import com.ra.md05_project.model.entity.ver1.ShowTime;
 import com.ra.md05_project.service.showtime.ShowTimeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,7 @@ public class ADShowTimeController {
     private ShowTimeService showTimeService;
 
     @GetMapping
-    public ResponseEntity<Page<ShowTime>> findAllShowTime(
+    public ResponseEntity<Page<ShowTimeResponseDTO>> findAllShowTime(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "3") int size,
             @RequestParam(name = "search", defaultValue = "") String search,
@@ -35,22 +34,22 @@ public class ADShowTimeController {
         Sort sortOrder = Sort.by(sort);
         sortOrder = direction.equalsIgnoreCase("desc") ? sortOrder.descending() : sortOrder.ascending();
         Pageable pageable = PageRequest.of(page, size, sortOrder);
-        Page<ShowTime> ShowTimes = showTimeService.findAll(search ,pageable );
+        Page<ShowTimeResponseDTO> ShowTimes = showTimeService.findAll(search ,pageable );
         return new ResponseEntity<>(ShowTimes, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ShowTime> getBookingById (@PathVariable Long id) {
+    public ResponseEntity<ShowTimeResponseDTO> getShowTimeById (@PathVariable Long id) {
         return new ResponseEntity<>(showTimeService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ShowTime> createShowTime(@Valid @RequestBody ShowTimeAddDTO showTimeAddDTO) throws IOException {
+    public ResponseEntity<ShowTimeResponseDTO> createShowTime(@Valid @RequestBody ShowTimeAddDTO showTimeAddDTO) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED).body(showTimeService.create(showTimeAddDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ShowTime> updateShowTime(@PathVariable Long id,@Valid @RequestBody ShowTimeUpdateDTO showTimeUpdateDTO) throws IOException {
+    public ResponseEntity<ShowTimeResponseDTO> updateShowTime(@PathVariable Long id,@Valid @RequestBody ShowTimeUpdateDTO showTimeUpdateDTO) throws IOException {
             return new ResponseEntity<>(showTimeService.update(id, showTimeUpdateDTO), HttpStatus.OK);
     }
 

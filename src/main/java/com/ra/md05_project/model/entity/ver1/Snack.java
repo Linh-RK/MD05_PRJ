@@ -29,12 +29,5 @@ public class Snack {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-    @ManyToMany
-    @JoinTable(
-            name = "booking_snack",
-            joinColumns = @JoinColumn(name = "snack_id"),
-            inverseJoinColumns = @JoinColumn(name = "booking_id")
-    )
-    private List<Snack> snacks;
 }
 

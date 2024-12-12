@@ -42,7 +42,7 @@ public class ADSnackController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Snack> getBookingById (@PathVariable Long id) {
+    public ResponseEntity<Snack> getSnackById (@PathVariable Long id) {
         return new ResponseEntity<>(snackService.findById(id), HttpStatus.OK);
     }
 

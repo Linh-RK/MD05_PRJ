@@ -46,5 +46,5 @@ public class MovieResponseDTO {
 
     private MovieType type;
 
-    private List<Category> categories = new ArrayList<>();
+    private List<Long> categoriesId = new ArrayList<>();
 }

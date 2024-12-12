@@ -42,7 +42,7 @@ public class ADCommentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Comment> getBookingById (@PathVariable Long id) {
+    public ResponseEntity<Comment> getCommentById (@PathVariable Long id) {
         return new ResponseEntity<>(commentService.findById(id), HttpStatus.OK);
     }
 

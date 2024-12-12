@@ -1,6 +1,8 @@
 package com.ra.md05_project.model.entity.ver1;
+import com.ra.md05_project.model.constant.DayType;
 import com.ra.md05_project.model.constant.MovieType;
 import com.ra.md05_project.model.constant.SeatType;
+import com.ra.md05_project.model.constant.TimeSlot;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,16 +26,16 @@ public class TicketPrice {
     private Long id;
 
     @Column(name = "movie_type", nullable = false, length = 10)
-    private String movieType;
+    private MovieType movieType;
 
     @Column(name = "seat_type", nullable = false, length = 10)
-    private String seatType;
+    private SeatType seatType;
 
     @Column(name = "day_type", nullable = false, length = 10)
-    private String dayType;
+    private DayType dayType;
 
     @Column(name = "time_slot", nullable = false, length = 20)
-    private String timeSlot;
+    private TimeSlot timeSlot;
 
     @Column(name = "price", nullable = false)
     private Double price;

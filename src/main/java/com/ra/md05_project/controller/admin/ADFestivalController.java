@@ -1,5 +1,7 @@
 package com.ra.md05_project.controller.admin;
 
+import com.ra.md05_project.dto.festival.FestivalAddDTO;
+import com.ra.md05_project.dto.festival.FestivalUpdateDTO;
 import com.ra.md05_project.dto.user.ResponseDTOSuccess;
 import com.ra.md05_project.model.entity.ver1.Comment;
 import com.ra.md05_project.model.entity.ver1.Festival;
@@ -40,18 +42,18 @@ public class ADFestivalController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Festival> getBookingById (@PathVariable Long id) {
+    public ResponseEntity<Festival> getFestivalById (@PathVariable Long id) {
         return new ResponseEntity<>(festivalService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Festival> createFestival(@Valid @RequestBody Festival Festival) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(festivalService.create(Festival));
+    public ResponseEntity<Festival> createFestival(@Valid @ModelAttribute FestivalAddDTO festivalAddDTO) throws IOException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(festivalService.create(festivalAddDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Festival> updateFestival(@PathVariable Long id,@Valid @RequestBody Festival Festival) throws IOException {
-            return new ResponseEntity<>(festivalService.update(id, Festival), HttpStatus.OK);
+    public ResponseEntity<Festival> updateFestival(@PathVariable Long id,@Valid @ModelAttribute FestivalUpdateDTO festivalUpdateDTO) throws IOException {
+            return new ResponseEntity<>(festivalService.update(id, festivalUpdateDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

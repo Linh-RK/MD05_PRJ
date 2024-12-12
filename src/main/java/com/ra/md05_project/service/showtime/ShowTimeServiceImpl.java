@@ -1,6 +1,7 @@
 package com.ra.md05_project.service.showtime;
 
 import com.ra.md05_project.dto.showtime.ShowTimeAddDTO;
+import com.ra.md05_project.dto.showtime.ShowTimeResponseDTO;
 import com.ra.md05_project.dto.showtime.ShowTimeUpdateDTO;
 import com.ra.md05_project.model.entity.ver1.Movie;
 import com.ra.md05_project.model.entity.ver1.Room;
@@ -32,13 +33,32 @@ public class ShowTimeServiceImpl implements ShowTimeService {
     @Autowired
     private RoomRepository roomRepository;
 
+    // Phương thức chuyển đổi từ ShowTime sang ShowTimeResponseDTO
+    private ShowTimeResponseDTO convertToShowTimeResponseDTO(ShowTime showTime) {
+        return ShowTimeResponseDTO.builder()
+                .id(showTime.getId())
+                .movieId(showTime.getMovie().getId())  // Lấy ID của Movie
+                .roomId(showTime.getRoom().getId())    // Lấy ID của Room
+                .startTime(showTime.getStartTime())
+                .endTime(showTime.getEndTime())
+                .createdAt(showTime.getCreatedAt())
+                .updatedAt(showTime.getUpdatedAt())
+                .isDeleted(showTime.getIsDeleted())
+                .type(showTime.getType())  // Loại Movie
+                .build();
+    }
+
     @Override
-    public Page<ShowTime> findAll(String search, Pageable pageable) {
+    public Page<ShowTimeResponseDTO> findAll(String search, Pageable pageable) {
+        Page<ShowTime> showTimes;
         if (search.isEmpty()) {
-            return showTimeRepository.findAll(pageable);
+            showTimes = showTimeRepository.findAllByIsDeletedIsFalse(pageable);
         } else {
-            return showTimeRepository.findByMovie_TitleContainingIgnoreCaseOrRoom_RoomNameContainingIgnoreCase(search, search, pageable);
+            showTimes = showTimeRepository.findByMovie_TitleContainingIgnoreCaseOrRoom_RoomNameContainingIgnoreCaseAndIsDeletedIsFalse(search, search, pageable);
         }
+
+        // Chuyển đổi từ Page<ShowTime> sang Page<ShowTimeResponseDTO>
+        return showTimes.map(this::convertToShowTimeResponseDTO);
     }
 
     @Override
@@ -53,7 +73,7 @@ public class ShowTimeServiceImpl implements ShowTimeService {
 
     @Override
     @Transactional
-    public ShowTime create(@Valid ShowTimeAddDTO showTimeAddDTO) {
+    public ShowTimeResponseDTO create(@Valid ShowTimeAddDTO showTimeAddDTO) {
         Movie movie = movieRepository.findById(showTimeAddDTO.getMovieId())
                 .orElseThrow(() -> new NoSuchElementException("Movie not found"));
 
@@ -69,12 +89,14 @@ public class ShowTimeServiceImpl implements ShowTimeService {
                 .type(showTimeAddDTO.getType())
                 .build();
 
-        return showTimeRepository.save(showTime);
+        showTime = showTimeRepository.save(showTime);
+
+        return convertToShowTimeResponseDTO(showTime);  // Chuyển đổi sang ShowTimeResponseDTO
     }
 
     @Override
     @Transactional
-    public ShowTime update(Long id, @Valid ShowTimeUpdateDTO showTimeUpdateDTO) {
+    public ShowTimeResponseDTO update(Long id, @Valid ShowTimeUpdateDTO showTimeUpdateDTO) {
         ShowTime showTime = showTimeRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("ShowTime not found with id " + id));
 
@@ -84,20 +106,25 @@ public class ShowTimeServiceImpl implements ShowTimeService {
         Room room = roomRepository.findById(showTimeUpdateDTO.getRoomId())
                 .orElseThrow(() -> new NoSuchElementException("Room not found"));
 
-        ShowTime showTimeUpdate = ShowTime.builder()
-                .id(id)
-                .movie(movie)
-                .room(room)
-                .startTime(showTimeUpdateDTO.getStartTime())
-                .updatedAt(LocalDate.now())
-                .type(showTimeUpdateDTO.getType())
-                .build();
+        // Cập nhật các thuộc tính của ShowTime, bao gồm startTime, updatedAt, type, v.v.
+        showTime.setMovie(movie);
+        showTime.setRoom(room);
+        showTime.setStartTime(showTimeUpdateDTO.getStartTime());
+        showTime.setUpdatedAt(LocalDate.now());  // Cập nhật thời gian sửa đổi
+        showTime.setType(showTimeUpdateDTO.getType());
 
-        return showTimeRepository.save(showTimeUpdate);
+        // Tính toán lại thời gian kết thúc (endTime)
+        showTime.calculateEndTime(); // Phương thức này sẽ tự động tính toán endTime
+
+        // Lưu đối tượng ShowTime đã cập nhật
+        showTime = showTimeRepository.save(showTime);
+        return convertToShowTimeResponseDTO(showTime);  // Chuyển đổi sang ShowTimeResponseDTO
     }
 
     @Override
-    public ShowTime findById(Long id) {
-        return showTimeRepository.findById(id).orElseThrow(()->new NoSuchElementException("Show time not found with id " + id));
+    public ShowTimeResponseDTO findById(Long id) {
+        ShowTime showTime = showTimeRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("ShowTime not found with id " + id));
+        return convertToShowTimeResponseDTO(showTime);  // Chuyển đổi sang ShowTimeResponseDTO
     }
 }

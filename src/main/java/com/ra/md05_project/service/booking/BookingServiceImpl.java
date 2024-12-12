@@ -56,12 +56,8 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private Double calculateSnackPrice(List<Snack> snacks) {
-        Double snackPrice = 0.0;
-
-        for (Snack snack : snacks) {
-            snackPrice += snack.getPrice(); // Cộng giá của mỗi món ăn nhẹ
-        }
-        return snackPrice;
+        if (snacks == null || snacks.isEmpty()) return 0.0;
+        return snacks.stream().mapToDouble(Snack::getPrice).sum();
     }
 
     @Transactional
@@ -85,6 +81,9 @@ public class BookingServiceImpl implements BookingService {
     public Booking create(BookingAddDTO bookingAddDTO) throws IOException {
         // Chuyển đổi DTO sang entity Booking
         Booking booking = new Booking();
+        if (bookingAddDTO.getBookingDetails() == null || bookingAddDTO.getBookingDetails().isEmpty()) {
+            throw new IllegalArgumentException("Booking details cannot be empty");
+        }
         User user = userRepository.findById(bookingAddDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
         ShowTime showTime = showTimeRepository.findById(bookingAddDTO.getShowTimeId())

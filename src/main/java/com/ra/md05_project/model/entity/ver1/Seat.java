@@ -1,5 +1,6 @@
 package com.ra.md05_project.model.entity.ver1;
 import com.ra.md05_project.model.constant.SeatStatus;
+import com.ra.md05_project.model.constant.SeatType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,14 +27,14 @@ public class Seat {
     private Integer seatNumber;
 
     @Column(name = "type", length = 50) 
-    private String type;
+    private SeatType type;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 20)
     private SeatStatus status;
 
-//    @Column(name = "is_deleted")
-//    private Boolean isDeleted;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 }
 
 

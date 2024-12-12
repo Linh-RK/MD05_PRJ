@@ -15,9 +15,11 @@ public class SnackAddDTO {
     @NotNull(message = "Name is required")
     private String name;
 
+    @NotNull(message = "Type is required")
+    private String type;
+
     @NotNull(message = "Price is required")
     private Double price;
 
-    @NotNull(message = "Type is required")
-    private String type;
+
 }

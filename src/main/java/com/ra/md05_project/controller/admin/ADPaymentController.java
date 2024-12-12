@@ -39,7 +39,7 @@ public class ADPaymentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Payment> getBookingById (@PathVariable Long id) {
+    public ResponseEntity<Payment> getPaymentById (@PathVariable Long id) {
         return new ResponseEntity<>(paymentService.findById(id), HttpStatus.OK);
     }
 

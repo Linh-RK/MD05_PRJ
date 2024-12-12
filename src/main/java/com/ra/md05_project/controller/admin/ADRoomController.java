@@ -41,7 +41,7 @@ public class ADRoomController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Room> getBookingById (@PathVariable Long id) {
+    public ResponseEntity<Room> getRoomById (@PathVariable Long id) {
         return new ResponseEntity<>(roomService.findById(id), HttpStatus.OK);
     }
 

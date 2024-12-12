@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FestivalRepository extends JpaRepository<Festival, Long> {
 
-    Page<Festival> findByTitleContainingIgnoreCase(String search, Pageable pageable);
+    Page<Festival> findByTitleContainingIgnoreCaseAndIsDeletedIsFalse(String search, Pageable pageable);
+    Page<Festival> findAllByIsDeletedIsFalse(Pageable pageable);
 }

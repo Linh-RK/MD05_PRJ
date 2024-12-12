@@ -1,6 +1,8 @@
 package com.ra.md05_project.dto.showtime;
 
 import com.ra.md05_project.model.constant.MovieType;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import lombok.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;

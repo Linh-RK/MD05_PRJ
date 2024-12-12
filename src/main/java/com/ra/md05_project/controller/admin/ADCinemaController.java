@@ -43,7 +43,7 @@ public class ADCinemaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cinema> getBookingById (@PathVariable Long id) {
+    public ResponseEntity<Cinema> getCinemaById (@PathVariable Long id) {
         return new ResponseEntity<>(cinemaService.findById(id), HttpStatus.OK);
     }
 

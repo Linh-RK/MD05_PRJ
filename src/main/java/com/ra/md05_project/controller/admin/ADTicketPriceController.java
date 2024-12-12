@@ -39,7 +39,7 @@ public class ADTicketPriceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TicketPrice> getBookingById (@PathVariable Long id) {
+    public ResponseEntity<TicketPrice> getTicketPriceById (@PathVariable Long id) {
         return new ResponseEntity<>(ticketPriceService.findById(id), HttpStatus.OK);
     }
 

@@ -1,6 +1,7 @@
 package com.ra.md05_project.service.seat;
 
 import com.ra.md05_project.dto.seat.SeatAddDTO;
+import com.ra.md05_project.dto.seat.SeatResponseDTO;
 import com.ra.md05_project.dto.seat.SeatUpdateDTO;
 import com.ra.md05_project.model.entity.ver1.Room;
 import com.ra.md05_project.model.entity.ver1.Seat;
@@ -13,7 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 @Service
 public class SeatServiceImpl implements SeatService {
 
@@ -24,13 +24,16 @@ public class SeatServiceImpl implements SeatService {
     private RoomRepository roomRepository;
 
     @Override
-    public Page<Seat> findAll(String search, Pageable pageable) {
+    public Page<SeatResponseDTO> findAll(String search, Pageable pageable) {
+        Page<Seat> seats;
         if (search.isEmpty()) {
-            return seatRepository.findAll(pageable);
+            seats = seatRepository.findAllByIsDeletedIsFalse(pageable);
         } else {
-            // Tìm kiếm theo tên phòng hoặc trạng thái ghế
-            return seatRepository.findByRowNumberContainingIgnoreCaseOrSeatNumberContaining(search, search, pageable);
+            seats = seatRepository.findByRowNumberContainingIgnoreCaseOrSeatNumberContainingAndIsDeletedIsFalse(search, search, pageable);
         }
+
+        // Chuyển đổi Page<Seat> thành Page<SeatResponseDTO>
+        return seats.map(this::convertToSeatResponseDTO);
     }
 
     @Override
@@ -38,12 +41,13 @@ public class SeatServiceImpl implements SeatService {
     public void delete(Long id) {
         Seat seat = seatRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Seat not found with id " + id));
-        seatRepository.delete(seat);
+        seat.setIsDeleted(true);
+        seatRepository.save(seat);
     }
 
     @Override
     @Transactional
-    public Seat create(SeatAddDTO seatAddDTO) {
+    public SeatResponseDTO create(SeatAddDTO seatAddDTO) {
         Room room = roomRepository.findById(seatAddDTO.getRoomId())
                 .orElseThrow(() -> new NoSuchElementException("Room not found"));
 
@@ -52,34 +56,52 @@ public class SeatServiceImpl implements SeatService {
                 .rowNumber(seatAddDTO.getRowNumber())
                 .seatNumber(seatAddDTO.getSeatNumber())
                 .type(seatAddDTO.getType())
+                .isDeleted(false)
                 .status(seatAddDTO.getStatus())
                 .build();
 
-        return seatRepository.save(seat);
+        seat = seatRepository.save(seat);
+
+        return convertToSeatResponseDTO(seat);
     }
 
     @Override
     @Transactional
-    public Seat update(Long id, SeatUpdateDTO seatUpdateDTO) {
-
+    public SeatResponseDTO update(Long id, SeatUpdateDTO seatUpdateDTO) {
         Seat seat = seatRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Seat not found with id " + id));
 
+        seat.setRowNumber(seatUpdateDTO.getRowNumber());
+        seat.setSeatNumber(seatUpdateDTO.getSeatNumber());
+        seat.setType(seatUpdateDTO.getType());
+        seat.setStatus(seatUpdateDTO.getStatus());
+        seat.setRoom(roomRepository.findById(seatUpdateDTO.getRoomId())
+                .orElseThrow(() -> new NoSuchElementException("Room not found")));
 
-        Seat seatUpdate = Seat.builder()
-                .rowNumber(seatUpdateDTO.getRowNumber())
-                .seatNumber(seatUpdateDTO.getSeatNumber())
-                .type(seatUpdateDTO.getType())
-                .status(seatUpdateDTO.getStatus())
-                .room(roomRepository.findById(seatUpdateDTO.getRoomId())
-                        .orElseThrow(() -> new NoSuchElementException("Room not found")))
-                .build();
+        seat = seatRepository.save(seat);
 
-        return seatRepository.save(seatUpdate);
+        return convertToSeatResponseDTO(seat);
     }
 
     @Override
-    public Seat findById(Long id) {
-        return seatRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Seat not found with id " + id));
+    public SeatResponseDTO findById(Long id) {
+        Seat seat = seatRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Seat not found with id " + id));
+
+        return convertToSeatResponseDTO(seat);
+    }
+
+    // Hàm chuyển đổi từ Seat sang SeatResponseDTO
+    private SeatResponseDTO convertToSeatResponseDTO(Seat seat) {
+        return SeatResponseDTO.builder()
+                .id(seat.getId())
+                .roomId(seat.getRoom().getId())
+                .cinemaId(seat.getRoom().getCinema().getId())  // Giả sử Room có mối quan hệ với Cinema
+                .seatName(seat.getRowNumber() + seat.getSeatNumber())  // CONCAT(rowNumber, seatNumber)
+                .type(seat.getType())
+                .status(seat.getStatus())
+                .isDeleted(seat.getIsDeleted())
+                .build();
     }
 }
+

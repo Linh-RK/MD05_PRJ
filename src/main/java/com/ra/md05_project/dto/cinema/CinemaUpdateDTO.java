@@ -2,6 +2,7 @@ package com.ra.md05_project.dto.cinema;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -18,7 +19,7 @@ public class CinemaUpdateDTO {
 
     private String phoneNumber;
 
-    private LocalDateTime createdDate;
+    private LocalDate createdDate;
 
-    private LocalDateTime updatedDate;
+    private LocalDate updatedDate;
 }

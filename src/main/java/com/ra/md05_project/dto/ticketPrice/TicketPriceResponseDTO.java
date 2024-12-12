@@ -1,5 +1,9 @@
 package com.ra.md05_project.dto.ticketPrice;
 
+import com.ra.md05_project.model.constant.DayType;
+import com.ra.md05_project.model.constant.MovieType;
+import com.ra.md05_project.model.constant.SeatType;
+import com.ra.md05_project.model.constant.TimeSlot;
 import jakarta.persistence.Column;
 import lombok.*;
 
@@ -11,13 +15,13 @@ import lombok.*;
 public class TicketPriceResponseDTO {
     private Long id;
 
-    private String movieType;
+    private MovieType movieType;
 
-    private String seatType;
+    private SeatType seatType;
 
-    private String dayType;
+    private DayType dayType;
 
-    private String timeSlot;
+    private TimeSlot timeSlot;
 
     private Double price;
 }
