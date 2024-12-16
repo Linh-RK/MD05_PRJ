@@ -19,4 +19,6 @@ public interface RoomService {
     Room findById(Long id);
 
     Room update(Long id, @Valid RoomUpdateDTO room);
+
+    void generateSeatsForRoom(Room room);
 }

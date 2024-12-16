@@ -10,11 +10,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class BookingDetailAddDTO {
-    private Long id;
-
-    private Double price;
-
-    private Booking booking;
-
-    private Seat seat;
+    private Long bookingId;
+    private Long seatId;
 }

@@ -29,14 +29,14 @@ public class ADSeatController {
     public ResponseEntity<Page<SeatResponseDTO>> findAllSeat(
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "3") int size,
-            @RequestParam(name = "search", defaultValue = "") String search,
             @RequestParam(name = "sort", defaultValue = "id") String sort,
+            @RequestParam(name = "filter", required = false) Long roomId,
             @RequestParam(name = "direction", defaultValue = "asc") String direction
     ) {
         Sort sortOrder = Sort.by(sort);
         sortOrder = direction.equalsIgnoreCase("desc") ? sortOrder.descending() : sortOrder.ascending();
         Pageable pageable = PageRequest.of(page, size, sortOrder);
-        Page<SeatResponseDTO> seats = seatService.findAll(search ,pageable );
+        Page<SeatResponseDTO> seats = seatService.findAll(roomId, pageable );
         return new ResponseEntity<>(seats, HttpStatus.OK);
     }
 
@@ -45,21 +45,21 @@ public class ADSeatController {
         return new ResponseEntity<>(seatService.findById(id), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<SeatResponseDTO> createSeat(@Valid @RequestBody SeatAddDTO seatAddDTO) throws IOException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(seatService.create(seatAddDTO));
-    }
+//    @PostMapping
+//    public ResponseEntity<SeatResponseDTO> createSeat(@Valid @RequestBody SeatAddDTO seatAddDTO) throws IOException {
+//        return ResponseEntity.status(HttpStatus.CREATED).body(seatService.create(seatAddDTO));
+//    }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<SeatResponseDTO> updateSeat(@PathVariable Long id,@Valid @RequestBody SeatUpdateDTO seatUpdateDTO) throws IOException {
-            return new ResponseEntity<>(seatService.update(id, seatUpdateDTO), HttpStatus.OK);
+//    @PutMapping("/{id}")
+//    public ResponseEntity<SeatResponseDTO> updateSeat(@PathVariable Long id,@Valid @RequestBody SeatUpdateDTO seatUpdateDTO) throws IOException {
+//            return new ResponseEntity<>(seatService.update(id, seatUpdateDTO), HttpStatus.OK);
+//
+//    }
 
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteSeat(@PathVariable Long id) {
-            seatService.delete(id);
-            return new ResponseEntity<>(new ResponseDTOSuccess<>("Delete successfully",200),HttpStatus.OK);
-
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deleteSeat(@PathVariable Long id) {
+//            seatService.delete(id);
+//            return new ResponseEntity<>(new ResponseDTOSuccess<>("Delete successfully",200),HttpStatus.OK);
+//
+//    }
 }

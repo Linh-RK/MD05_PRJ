@@ -28,5 +28,11 @@ public class Room {
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
+
+    @Column(name = "row_seat")
+    private Character rowSeat;
+
+    @Column(name = "col_seat")
+    private long colSeat;
 }
 

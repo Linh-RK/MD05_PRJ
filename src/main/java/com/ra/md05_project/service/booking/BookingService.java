@@ -2,7 +2,8 @@ package com.ra.md05_project.service.booking;
 
 
 import com.ra.md05_project.dto.booking.BookingAddDTO;
-import com.ra.md05_project.model.entity.ver1.Booking;
+import com.ra.md05_project.dto.booking.BookingResponseDTO;
+import com.ra.md05_project.model.entity.ver1.User;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -10,11 +11,11 @@ import org.springframework.data.domain.Pageable;
 import java.io.IOException;
 
 public interface BookingService {
-    Page<Booking> findAll(String search, Pageable pageable);
+    Page<BookingResponseDTO> findAll(String search, Pageable pageable);
 
-    Booking create(@Valid BookingAddDTO bookingAddDTO) throws IOException;
+    BookingResponseDTO create(@Valid BookingAddDTO bookingAddDTO, User user) throws IOException;
 
-    Booking findById(Long id);
+    BookingResponseDTO findById(Long id);
 
     void delete(Long id);
 }

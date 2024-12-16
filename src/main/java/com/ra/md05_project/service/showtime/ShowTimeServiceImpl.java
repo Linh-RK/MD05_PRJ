@@ -44,7 +44,7 @@ public class ShowTimeServiceImpl implements ShowTimeService {
                 .createdAt(showTime.getCreatedAt())
                 .updatedAt(showTime.getUpdatedAt())
                 .isDeleted(showTime.getIsDeleted())
-                .type(showTime.getType())  // Loại Movie
+//                .type(showTime.getType())  // Loại Movie
                 .build();
     }
 
@@ -86,7 +86,7 @@ public class ShowTimeServiceImpl implements ShowTimeService {
                 .startTime(showTimeAddDTO.getStartTime())
                 .createdAt(LocalDate.now())
                 .isDeleted(false)
-                .type(showTimeAddDTO.getType())
+//                .type(showTimeAddDTO.getType())
                 .build();
 
         showTime = showTimeRepository.save(showTime);
@@ -111,7 +111,7 @@ public class ShowTimeServiceImpl implements ShowTimeService {
         showTime.setRoom(room);
         showTime.setStartTime(showTimeUpdateDTO.getStartTime());
         showTime.setUpdatedAt(LocalDate.now());  // Cập nhật thời gian sửa đổi
-        showTime.setType(showTimeUpdateDTO.getType());
+//        showTime.setType(showTimeUpdateDTO.getType());
 
         // Tính toán lại thời gian kết thúc (endTime)
         showTime.calculateEndTime(); // Phương thức này sẽ tự động tính toán endTime

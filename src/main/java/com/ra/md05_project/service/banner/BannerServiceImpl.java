@@ -3,6 +3,7 @@ package com.ra.md05_project.service.banner;
 import com.ra.md05_project.dto.banner.BannerAddDTO;
 import com.ra.md05_project.dto.banner.BannerUpdateDTO;
 import com.ra.md05_project.dto.user.ResponseDTOSuccess;
+import com.ra.md05_project.model.constant.BannerType;
 import com.ra.md05_project.model.entity.ver1.Banner;
 import com.ra.md05_project.repository.BannerRepository;
 import com.ra.md05_project.service.uploadFile.UploadService;
@@ -25,10 +26,9 @@ public class BannerServiceImpl implements BannerService {
     private UploadService uploadService;
 
     @Override
-    public Page<Banner> findAll(String search, Pageable pageable) {
-        return bannerRepository.findAllByBannerNameContainingIgnoreCase(search, pageable);
+    public Page<Banner> findAll(String search, BannerType type, String position, Pageable pageable) {
+        return bannerRepository.findAllWithFilters(search, type, position.isEmpty() ? null : position, pageable);
     }
-
     @Override
     public Banner create(BannerAddDTO bannerAddDTO) throws IOException {
         Banner banner =  Banner.builder()

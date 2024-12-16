@@ -1,10 +1,9 @@
-package com.ra.md05_project.controller.admin;
-
+package com.ra.md05_project.controller.user;
 
 import com.ra.md05_project.dto.booking.BookingAddDTO;
 import com.ra.md05_project.dto.booking.BookingResponseDTO;
 import com.ra.md05_project.dto.user.ResponseDTOSuccess;
-import com.ra.md05_project.model.entity.ver1.Banner;
+import com.ra.md05_project.model.constant.PaymentMethod;
 import com.ra.md05_project.model.entity.ver1.Booking;
 import com.ra.md05_project.model.entity.ver1.User;
 import com.ra.md05_project.security.UserPrinciple;
@@ -21,10 +20,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
-@RequestMapping("/admin/booking")
-public class ADBookingController {
+@RequestMapping("/user/booking")
+public class UBookingController {
     @Autowired
     private BookingService bookingService;
     @GetMapping
@@ -37,11 +37,15 @@ public class ADBookingController {
             @AuthenticationPrincipal UserPrinciple userPrincipal
     ) {
         User currentUser = userPrincipal.getUser();
-        Sort sortOrder = Sort.by(sort);
-        sortOrder = direction.equalsIgnoreCase("desc") ? sortOrder.descending() : sortOrder.ascending();
-        Pageable pageable = PageRequest.of(page, size, sortOrder);
-        Page<BookingResponseDTO> bookings = bookingService.findAll(search ,pageable );
-        return new ResponseEntity<>(bookings, HttpStatus.OK);
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } else {
+            Sort sortOrder = Sort.by(sort);
+            sortOrder = direction.equalsIgnoreCase("desc") ? sortOrder.descending() : sortOrder.ascending();
+            Pageable pageable = PageRequest.of(page, size, sortOrder);
+            Page<BookingResponseDTO> bookings = bookingService.findAll(search ,pageable );
+            return new ResponseEntity<>(bookings, HttpStatus.OK);
+        }
     }
 
     @GetMapping("/{id}")
@@ -49,14 +53,29 @@ public class ADBookingController {
             @PathVariable Long id,
             @AuthenticationPrincipal UserPrinciple userPrincipal) throws IOException {
         User currentUser = userPrincipal.getUser();
-        return new ResponseEntity<>(bookingService.findById(id), HttpStatus.OK);
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } else {
+            return new ResponseEntity<>(bookingService.findById(id), HttpStatus.OK);
+        }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteBooking(
-            @PathVariable Long id,
-            @AuthenticationPrincipal UserPrinciple userPrincipal) {
-            bookingService.delete(id);
-            return new ResponseEntity<>(new ResponseDTOSuccess<>("Delete successfully",200),HttpStatus.OK);
-    }
+    @PostMapping
+    public ResponseEntity<BookingResponseDTO> createBooking(
+            @Valid @RequestBody BookingAddDTO bookingAddDTO,
+            @AuthenticationPrincipal UserPrinciple userPrincipal) throws IOException {
+        User currentUser = userPrincipal.getUser();
+        if (currentUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        } else {
+            return new ResponseEntity<>(bookingService.create(bookingAddDTO,currentUser),HttpStatus.CREATED);
+        }
+     }
+
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<?> deleteBooking(@PathVariable Long id) {
+//        bookingService.delete(id);
+//        return new ResponseEntity<>(new ResponseDTOSuccess<>("Delete successfully",200),HttpStatus.OK);
+//    }
 }

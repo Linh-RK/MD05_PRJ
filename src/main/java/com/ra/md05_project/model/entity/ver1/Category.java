@@ -1,5 +1,6 @@
 package com.ra.md05_project.model.entity.ver1;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.ArrayList;
@@ -18,12 +19,13 @@ public class Category {
     @Column(name = "category_id")
     private Long id;
 
-    @Column(name = "category_name", nullable = false, length = 100)
+    @Column(name = "category_name", length = 100)
     private String categoryName;
 
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "categories") // Đã được ánh xạ bởi `categories` trong Movie
     private List<Movie> movies = new ArrayList<>();
 }

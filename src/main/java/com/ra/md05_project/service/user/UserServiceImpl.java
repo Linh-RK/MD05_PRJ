@@ -1,6 +1,5 @@
 package com.ra.md05_project.service.user;
 
-import com.ra.md05_project.dto.user.LogoutRequest;
 import com.ra.md05_project.dto.user.login.UserLoginRequestDTO;
 import com.ra.md05_project.dto.user.login.UserLoginResponseDTO;
 import com.ra.md05_project.dto.user.register.UserRequestDTO;
@@ -17,6 +16,8 @@ import com.ra.md05_project.repository.TokenRepository;
 import com.ra.md05_project.repository.UserRepository;
 import com.ra.md05_project.security.UserPrinciple;
 import com.ra.md05_project.security.jwt.JwtProvider;
+import com.ra.md05_project.service.uploadFile.UploadService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -50,6 +52,8 @@ public class UserServiceImpl implements UserService {
     private TokenRepository tokenRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private UploadService uploadService;
 
     @Override
     public UserResponseDTO create(UserRequestDTO userRequestDTO) {
@@ -96,12 +100,13 @@ public class UserServiceImpl implements UserService {
         tokenEntity.setUser(userPrinciple.getUser());
         tokenEntity.setCreatedAt(LocalDateTime.now());
         tokenEntity.setExpiredAt(LocalDateTime.now().plusDays(1)); // ví dụ thời hạn token là 1 ngày
+        tokenEntity.setValid(true);
         tokenRepository.save(tokenEntity);
 
         return UserLoginResponseDTO.builder()
                 .accessToken(token)
                 .typeToken("Bearer")
-                .userId(userPrinciple.getUser().getId())
+                        .userId(userPrinciple.getUser().getId())
                 .username(userPrinciple.getUsername())
                 .roles(userPrinciple.getUser().getRoles())
                 .build();
@@ -117,11 +122,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void logout(LogoutRequest request) {
-        Token token = tokenRepository.findByToken(request.getToken())
-                .orElseThrow(() -> new NoSuchElementException("Token not found"));
-        token.setValid(false);  // Đánh dấu token là vô hiệu hóa
-        tokenRepository.save(token);
+    @Transactional
+    public void logout(String token) {
+        tokenRepository.deleteByToken(token);
     }
 
     @Override
@@ -130,7 +133,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO update( UserUpdateDTO userRequestDTO, User user) {
+    public UserResponseDTO update( UserUpdateDTO userRequestDTO, User user) throws IOException {
         // Retrieve existing user by id
         User existingUser = userRepository.findById(user.getId())
                 .orElseThrow(() -> new NoSuchElementException("User not found"));
@@ -142,10 +145,10 @@ public class UserServiceImpl implements UserService {
         existingUser.setUpdatedAt(LocalDate.now());
 
         // Optionally handle avatar upload
-//        if (userRequestDTO.getAvatar() != null  && userRequestDTO.getAvatar().getSize()>0) {
-//            String avatar = uploadFileService.upload(userRequestDTO.getAvatar());
-//            existingUser.setAvatar(avatar);
-//        }
+        if (userRequestDTO.getAvatar() != null  && userRequestDTO.getAvatar().getSize()>0) {
+            String avatar = uploadService.uploadFile(userRequestDTO.getAvatar());
+            existingUser.setAvatar(avatar);
+        }
         // Save the updated user
         User updatedUser = userRepository.save(existingUser);
 

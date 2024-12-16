@@ -41,9 +41,9 @@ public class ShowTime {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
-    private MovieType type;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "type", nullable = false)
+//    private MovieType type;
 
     @PrePersist
     @PreUpdate

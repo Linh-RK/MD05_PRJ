@@ -3,14 +3,20 @@ package com.ra.md05_project.service.room;
 import com.ra.md05_project.dto.room.RoomAddDTO;
 import com.ra.md05_project.dto.room.RoomUpdateDTO;
 import com.ra.md05_project.model.constant.RoomStatus;
+import com.ra.md05_project.model.constant.SeatStatus;
+import com.ra.md05_project.model.constant.SeatType;
 import com.ra.md05_project.model.entity.ver1.Cinema;
 import com.ra.md05_project.model.entity.ver1.Room;
+import com.ra.md05_project.model.entity.ver1.Seat;
 import com.ra.md05_project.repository.CinemaRepository;
 import com.ra.md05_project.repository.RoomRepository;
+import com.ra.md05_project.repository.SeatRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -25,6 +31,9 @@ public class RoomServiceImpl implements RoomService {
 
     @Autowired
     private CinemaRepository cinemaRepository;
+
+    @Autowired
+    private SeatRepository seatRepository;
 
     @Override
     public Page<Room> findAll(String search, Pageable pageable) {
@@ -56,10 +65,15 @@ public class RoomServiceImpl implements RoomService {
                 .roomName(roomAddDTO.getRoomName())
                 .status(RoomStatus.ACTIVE)
                 .cinema(cinema)
+                .rowSeat(roomAddDTO.getRowSeat())
+                .colSeat(roomAddDTO.getColSeat())
                 .isDeleted(false)
                 .build();
 
-        return roomRepository.save(room);
+        Room savedRoom = roomRepository.save(room);
+        generateSeatsForRoom(savedRoom);
+
+        return savedRoom;
     }
 
     @Override
@@ -73,11 +87,51 @@ public class RoomServiceImpl implements RoomService {
                 .roomName(roomUpdateDTO.getRoomName())
                 .status(roomUpdateDTO.getStatus())
                 .isDeleted(false)
+               .rowSeat(roomUpdateDTO.getRowSeat())
+               .colSeat(roomUpdateDTO.getColSeat())
                 .cinema(cinemaRepository.findById(roomUpdateDTO.getCinemaId())
                         .orElseThrow(() -> new NoSuchElementException("Cinema not found")))
                 .build();
 
+       if(roomUpdateDTO.getRowSeat() !=  room.getRowSeat() || roomUpdateDTO.getColSeat() !=  room.getColSeat()){
+        //      Xoa het ghe cu, tao ghe moi
+           seatRepository.deleteAllByRoom_Id(room.getId());
+        //      tao ghe moi
+           generateSeatsForRoom(roomUpdate);
+       }
         return roomRepository.save(roomUpdate);
+    }
+
+    @Override
+    @Transactional
+    public void generateSeatsForRoom(Room room) {
+        if (room.getRowSeat() == null || room.getColSeat() <1) {
+            throw new IllegalArgumentException("Row and column seats must be specified for the room");
+        }
+
+        List<Seat> seats = new ArrayList<>();
+        for (char letter = 'A'; letter <= room.getRowSeat(); letter++) {
+            for (int col = 1; col <= room.getColSeat(); col++) {
+                Seat seat = new Seat();
+                seat.setRoom(room);
+                seat.setRowNumber(letter);
+                seat.setSeatNumber(col);
+                seat.setStatus(SeatStatus.AVAILABLE);
+                seat.setIsDeleted(false);
+
+                // Set seat type based on the given rules
+                if (letter == room.getRowSeat()) {
+                    seat.setType(SeatType.SWEET_BOX);
+                } else if (letter >= 'A'+ 2 &&
+                        col > 2 && col < room.getColSeat() - 1 ) {
+                    seat.setType(SeatType.VIP);
+                } else {
+                    seat.setType(SeatType.STANDARD);
+                }
+                seatRepository.save(seat);
+                seats.add(seat);
+            }
+        }
     }
 
     @Override

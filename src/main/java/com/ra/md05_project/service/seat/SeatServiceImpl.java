@@ -24,12 +24,12 @@ public class SeatServiceImpl implements SeatService {
     private RoomRepository roomRepository;
 
     @Override
-    public Page<SeatResponseDTO> findAll(String search, Pageable pageable) {
+    public Page<SeatResponseDTO> findAll(Long roomId, Pageable pageable) {
         Page<Seat> seats;
-        if (search.isEmpty()) {
+        if (roomId == null) {
             seats = seatRepository.findAllByIsDeletedIsFalse(pageable);
         } else {
-            seats = seatRepository.findByRowNumberContainingIgnoreCaseOrSeatNumberContainingAndIsDeletedIsFalse(search, search, pageable);
+            seats = seatRepository.findByRoom_IdAndIsDeletedIsFalse( roomId, pageable);
         }
 
         // Chuyển đổi Page<Seat> thành Page<SeatResponseDTO>
@@ -97,7 +97,7 @@ public class SeatServiceImpl implements SeatService {
                 .id(seat.getId())
                 .roomId(seat.getRoom().getId())
                 .cinemaId(seat.getRoom().getCinema().getId())  // Giả sử Room có mối quan hệ với Cinema
-                .seatName(seat.getRowNumber() + seat.getSeatNumber())  // CONCAT(rowNumber, seatNumber)
+                .seatName((seat.getRowNumber() + String.valueOf(seat.getSeatNumber())))  // CONCAT(rowNumber, seatNumber)
                 .type(seat.getType())
                 .status(seat.getStatus())
                 .isDeleted(seat.getIsDeleted())

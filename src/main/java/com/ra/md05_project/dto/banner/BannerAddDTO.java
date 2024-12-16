@@ -16,10 +16,10 @@ public class BannerAddDTO {
     @NotEmpty(message = "Banner name cannot be empty")
     private String bannerName;
 
-    @NotEmpty(message = "URL cannot be empty")
+    @NotNull(message = "URL cannot be empty")
     private MultipartFile url;
 
-    @NotEmpty(message = "Type cannot be empty")
+    @NotNull(message = "Type cannot be empty")
     private BannerType type;
 
     @NotNull(message = "Position cannot be null")

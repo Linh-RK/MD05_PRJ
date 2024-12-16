@@ -3,6 +3,7 @@ package com.ra.md05_project.dto.showtime;
 import com.ra.md05_project.model.constant.MovieType;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
+import jakarta.validation.constraints.FutureOrPresent;
 import lombok.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -23,9 +24,10 @@ public class ShowTimeAddDTO {
     private Long roomId;
 
     @NotNull(message = "Start time is required")
+    @FutureOrPresent
     private LocalDateTime startTime;
 
-    @NotNull(message = "Movie type is required")
-    private MovieType type;
+//    @NotNull(message = "Movie type is required")
+//    private MovieType type;
 
 }

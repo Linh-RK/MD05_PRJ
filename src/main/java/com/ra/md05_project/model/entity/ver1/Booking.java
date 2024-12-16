@@ -19,28 +19,28 @@ public class Booking {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "total_price", nullable = false)
+    @Column(name = "total_price")
     private Double totalPrice;
 
-    @Column(name = "total_seat", nullable = false)
-    private Double totalSeat;
+    @Column(name = "total_seat")
+    private Integer totalSeat;
 
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private LocalDateTime createdAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "showtime_id", nullable = false)
+    @JoinColumn(name = "showtime_id")
     private ShowTime showtime;
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL)
     private List<BookingDetail> bookingDetails;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "payment", nullable = false)
+    @Column(name = "payment")
     private PaymentMethod paymentMethod;
 
     @ManyToMany
@@ -54,4 +54,6 @@ public class Booking {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 }
+
+
 

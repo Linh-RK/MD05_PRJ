@@ -14,7 +14,7 @@ import lombok.*;
 public class SeatUpdateDTO {
 
     @NotBlank(message = "Row number is required")
-    private String rowNumber;
+    private Character rowNumber;
 
     private Integer seatNumber;
 

@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Optional;
 
 public interface SeatService {
-    Page<SeatResponseDTO> findAll(String search, Pageable pageable);
+    Page<SeatResponseDTO> findAll(Long roomId, Pageable pageable);
 
     void delete(Long id);
 

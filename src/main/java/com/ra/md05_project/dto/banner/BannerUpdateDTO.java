@@ -24,6 +24,4 @@ public class BannerUpdateDTO {
 
     @NotNull(message = "Position cannot be null")
     private String position;
-
-
 }

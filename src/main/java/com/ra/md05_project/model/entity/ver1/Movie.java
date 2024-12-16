@@ -76,3 +76,5 @@ public class Movie {
     )
     private List<Category> categories = new ArrayList<>();
 }
+
+

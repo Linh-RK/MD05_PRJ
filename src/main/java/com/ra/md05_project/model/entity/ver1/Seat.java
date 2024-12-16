@@ -21,11 +21,12 @@ public class Seat {
     private Room room;
 
     @Column(name = "row_num", length = 10)
-    private String rowNumber;
+    private Character rowNumber;
 
     @Column(name = "seat_num")
     private Integer seatNumber;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "type", length = 50) 
     private SeatType type;
 
@@ -36,6 +37,7 @@ public class Seat {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 }
+
 
 
 

@@ -16,6 +16,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -29,12 +32,21 @@ public class SecurityConfig {
     private JwtEntryPoint jwtEntryPoint;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.
-                csrf(AbstractHttpConfigurer::disable)
+        return httpSecurity
+                .cors(cf->cf.configurationSource(request -> {
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedOrigins(List.of("http://localhost:5173/"));
+            config.setAllowedHeaders(List.of("*"));
+            config.setAllowCredentials(true);
+            config.setAllowedMethods(List.of("*"));
+            config.setExposedHeaders(List.of("*"));
+            return config;
+        }))
+                .csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider())
                 .authorizeHttpRequests(auth->{
 //                    auth.requestMatchers("/admin/**").hasAuthority("ROLE_ADMIN");
-//                    auth.requestMatchers("/cart/**").authenticated();
+                    auth.requestMatchers("/user/**").authenticated();
                     auth.anyRequest().permitAll();
                 }).sessionManagement(auth->auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
                 exceptionHandling(auth->auth.authenticationEntryPoint(jwtEntryPoint)).

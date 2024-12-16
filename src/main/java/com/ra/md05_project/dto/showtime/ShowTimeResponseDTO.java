@@ -31,5 +31,5 @@ public class ShowTimeResponseDTO {
 
     private Boolean isDeleted;
 
-    private MovieType type;
+//    private MovieType type;
 }

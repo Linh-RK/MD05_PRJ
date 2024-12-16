@@ -12,5 +12,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
 
     Page<Seat> findAllByIsDeletedIsFalse(Pageable pageable);
 
-    Page<Seat> findByRowNumberContainingIgnoreCaseOrSeatNumberContainingAndIsDeletedIsFalse(String search, String search1, Pageable pageable);
+    Page<Seat> findByRoom_IdAndIsDeletedIsFalse( Long roomId, Pageable pageable);
+
+    void deleteAllByRoom_Id(Long id);
 }

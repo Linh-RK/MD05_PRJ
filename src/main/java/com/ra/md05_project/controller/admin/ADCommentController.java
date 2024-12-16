@@ -6,6 +6,7 @@ import com.ra.md05_project.dto.user.ResponseDTOSuccess;
 import com.ra.md05_project.model.entity.ver1.Category;
 import com.ra.md05_project.model.entity.ver1.Cinema;
 import com.ra.md05_project.model.entity.ver1.Comment;
+import com.ra.md05_project.security.UserPrinciple;
 import com.ra.md05_project.service.comment.CommentService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -32,7 +34,8 @@ public class ADCommentController {
             @RequestParam(name = "size", defaultValue = "3") int size,
             @RequestParam(name = "search", defaultValue = "") String search,
             @RequestParam(name = "sort", defaultValue = "id") String sort,
-            @RequestParam(name = "direction", defaultValue = "asc") String direction
+            @RequestParam(name = "direction", defaultValue = "asc") String direction,
+            @AuthenticationPrincipal UserPrinciple userPrincipal
     ) {
         Sort sortOrder = Sort.by(sort);
         sortOrder = direction.equalsIgnoreCase("desc") ? sortOrder.descending() : sortOrder.ascending();
@@ -42,22 +45,31 @@ public class ADCommentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Comment> getCommentById (@PathVariable Long id) {
+    public ResponseEntity<Comment> getCommentById (
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserPrinciple userPrincipal) {
         return new ResponseEntity<>(commentService.findById(id), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Comment> createComment(@Valid @RequestBody CommentAddDTO commentAddDTO) throws IOException {
+    public ResponseEntity<Comment> createComment(
+            @Valid @RequestBody CommentAddDTO commentAddDTO,
+            @AuthenticationPrincipal UserPrinciple userPrincipal) throws IOException {
         return ResponseEntity.status(HttpStatus.CREATED).body(commentService.create(commentAddDTO));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Comment> updateComment(@PathVariable Long id,@Valid @RequestBody CommentUpdateDTO commentUpdateDTO) throws IOException {
+    public ResponseEntity<Comment> updateComment(
+            @PathVariable Long id,
+            @Valid @RequestBody CommentUpdateDTO commentUpdateDTO,
+            @AuthenticationPrincipal UserPrinciple userPrincipal) throws IOException {
             return new ResponseEntity<>(commentService.update(id, commentUpdateDTO), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long id) {
+    public ResponseEntity<?> deleteComment(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserPrinciple userPrincipal) {
             commentService.delete(id);
             return new ResponseEntity<>(new ResponseDTOSuccess<>("Delete successfully",200),HttpStatus.OK);
     }

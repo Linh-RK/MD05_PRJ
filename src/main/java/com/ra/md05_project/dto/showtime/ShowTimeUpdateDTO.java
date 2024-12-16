@@ -22,7 +22,7 @@ public class ShowTimeUpdateDTO {
     @NotNull(message = "Start time is required")
     private LocalDateTime startTime;
 
-    @NotNull(message = "Movie type is required")
-    private MovieType type;
+//    @NotNull(message = "Movie type is required")
+//    private MovieType type;
 
 }

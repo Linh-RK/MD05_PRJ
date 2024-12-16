@@ -25,15 +25,19 @@ public class TicketPrice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "movie_type", nullable = false, length = 10)
     private MovieType movieType;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "seat_type", nullable = false, length = 10)
     private SeatType seatType;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "day_type", nullable = false, length = 10)
     private DayType dayType;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "time_slot", nullable = false, length = 20)
     private TimeSlot timeSlot;
 

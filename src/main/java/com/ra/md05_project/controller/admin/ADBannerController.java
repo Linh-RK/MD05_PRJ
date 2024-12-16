@@ -4,6 +4,7 @@ import com.ra.md05_project.dto.banner.BannerAddDTO;
 import com.ra.md05_project.dto.banner.BannerResponseDTO;
 import com.ra.md05_project.dto.banner.BannerUpdateDTO;
 import com.ra.md05_project.dto.user.ResponseDTOSuccess;
+import com.ra.md05_project.model.constant.BannerType;
 import com.ra.md05_project.model.entity.ver1.Banner;
 import com.ra.md05_project.model.entity.ver1.User;
 import com.ra.md05_project.service.banner.BannerService;
@@ -19,8 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin/banner")
@@ -34,15 +33,19 @@ public class ADBannerController {
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "3") int size,
             @RequestParam(name = "search", defaultValue = "") String search,
+            @RequestParam(name = "type", defaultValue = "") BannerType type,
+            @RequestParam(name = "position", defaultValue = "") String position,
             @RequestParam(name = "sort", defaultValue = "id") String sort,
             @RequestParam(name = "direction", defaultValue = "asc") String direction
     ) {
         Sort sortOrder = Sort.by(sort);
         sortOrder = direction.equalsIgnoreCase("desc") ? sortOrder.descending() : sortOrder.ascending();
         Pageable pageable = PageRequest.of(page, size, sortOrder);
-        Page<Banner> banners = bannerService.findAll(search ,pageable );
+
+        Page<Banner> banners = bannerService.findAll(search, type, position, pageable);
         return new ResponseEntity<>(banners, HttpStatus.OK);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Banner> getBannerById (@PathVariable Long id) throws IOException {

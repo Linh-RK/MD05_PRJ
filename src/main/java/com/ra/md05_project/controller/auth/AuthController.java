@@ -27,8 +27,12 @@ public class AuthController {
         return new ResponseEntity<>(userService.login(userLoginRequestDTO), HttpStatus.OK);
     }
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody LogoutRequest request)  {
-        userService.logout(request);
-        return new ResponseEntity<>("Logout",HttpStatus.OK);
+    public ResponseEntity<?> logout(@RequestHeader("Authorization") String token)  {
+    // Xử lý token, loại bỏ "Bearer " nếu có
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);  // Lấy phần token sau "Bearer "
+        }
+        userService.logout(token);
+        return new ResponseEntity<>("Logout", HttpStatus.OK);
     }
 }

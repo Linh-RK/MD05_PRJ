@@ -12,13 +12,18 @@ import org.springframework.web.multipart.MultipartFile;
 @Builder
 //@UniqueUpdate(fieldName = "email", idField = "id", entityClass = User.class, message = "Size name must be unique")
 public class UserUpdateDTO {
+
     private Long id;
+
     @NotBlank
     @Email
     private String email;
+
     @NotBlank
     private String fullName;
+
     private MultipartFile avatar;
+
     @NotBlank
     private String phone;
 }
